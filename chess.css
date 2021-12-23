@@ -4,9 +4,9 @@ body {
     background-color: lightgrey;
   }
   .wrapper {
-    border: 49px solid rgb(66, 66, 66);
+    border: 24px solid rgb(66, 66, 66);
     width: 560px;
-    margin: 0 auto;
+    margin: 15px auto;
     display: grid;
     grid-gap: 0;
     grid-template-columns: repeat(8, 70px);
@@ -27,10 +27,10 @@ body {
     justify-content: center;
     align-items: center;
     padding: 20px;
-    font-size: 150%;
     background-color: #F0CDA3;
     text-align: center;   
     cursor: pointer;
+    border: "";
   }
   .box-inner{
     text-align: center;
@@ -83,7 +83,7 @@ body {
   .ondragover{
     background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
     background-size: 400% 400%;
-    animation: gradient 2s ease infinite;
+    animation: gradient 1.5s ease infinite;
     opacity: 0.5;
   }
   
