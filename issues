@@ -1,0 +1,1 @@
+1. background showing when dragging elements. SOLUTION: add transform: translate(0,0) to draggable element

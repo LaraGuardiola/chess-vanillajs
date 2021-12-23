@@ -30,6 +30,7 @@ body {
     font-size: 150%;
     background-color: #F0CDA3;
     text-align: center;
+    cursor: move;
   }
   .box-inner{
     text-align: center;
@@ -69,6 +70,7 @@ body {
 
   .piece{
     font-size: 60px;
+    transform: translate(0, 0);
   }
 
   .white{
@@ -76,3 +78,8 @@ body {
       font-weight: 120;
   }
   
+  /*DRAG AND DROP*/
+
+  .box.over{
+    background-color: black;
+  }
