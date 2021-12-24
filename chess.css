@@ -3,10 +3,41 @@ body {
     margin: 0px;
     background-color: lightgrey;
   }
+
+  .superwrapper{
+    display: flex;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  }
+
+  .stats{
+    margin: 1em;
+    font-size: 34px;
+  }
+
+  .blackSection{
+    display: none;
+    position: absolute;
+    top: 12%;
+    left: 5%;
+    transform: translate(-10%, -20%);
+  }
+
+  .whiteSection{
+    display: block;
+    position: absolute;
+    top: 80%;
+    left: 5%;
+    transform: translate(-10%, -20%);
+  }
+
   .wrapper {
     border: 24px solid rgb(66, 66, 66);
     width: 560px;
     margin: 15px auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -52%);
     display: grid;
     grid-gap: 0;
     grid-template-columns: repeat(8, 70px);
@@ -70,12 +101,13 @@ body {
 
   .piece{
     font-size: 52px;
+    font-weight: bold;
     transform: translate(0, 0);
   }
 
   .white{
       color: #fffbfb;
-      font-weight: 120;
+      
   }
   
   /*DRAG AND DROP*/
