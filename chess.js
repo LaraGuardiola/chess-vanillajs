@@ -2,34 +2,42 @@ let dragged;
 let lastMovedStartPos;
 let lastMovedEndPos;
 let tiles = document.querySelectorAll('.box')
-let fichas = [].slice.call(document.querySelectorAll('.box'))
-console.log(document)
-let listen = (...args) => fichas.forEach(tile => tile.addEventListener(...args));
+let listen = (...args) => tiles.forEach(tile => tile.addEventListener(...args));
 
 //*EVENTS
 
-listen('dragstart', event => {
-	dragged = event.target; //the piece in this case
+tiles.forEach(() =>{
+  listen('dragstart', ondragstart, false)
+  listen('dragover', ondragover, false)
+  listen('dragleave', ondragleave, false)
+  listen('drop', ondrop, false)
+})
+
+//*FUNCTIONS
+
+function ondragstart(event){
+  dragged = event.target; //the piece in this case
   lastMovedStartPos = dragged.parentNode;
   lastMovedStartPos.style.border = "3px solid black"
   if(lastMovedEndPos != null){
     lastMovedEndPos.style.removeProperty("border")
   }
-}, false)
+}
 
-listen('dragover', event => {
+function ondragover(event){
   event.preventDefault()
-  event.target.classList.add("ondragover")
+  if(event.target.className === 'box' || 'piece' && event.target.childElementCount === 0) return
+  else{
+    event.target.classList.add("ondragover")
   }
-  , false);
+}
 
-listen('dragleave', event => {
+function ondragleave(event){
   event.preventDefault()
   event.target.classList.remove("ondragover")
-}, false)
+}
 
-listen('drop', event => {
-	event.preventDefault();
+function ondrop(event){
   lastMovedEndPos = event.target
 	lastMovedEndPos.classList.remove("ondragover")
   lastMovedEndPos.style.border = "3px solid black"
@@ -39,4 +47,4 @@ listen('drop', event => {
     dragged.parentNode.removeChild(dragged);
 		event.target.appendChild(dragged);  
 	}
-}, false)
+}
