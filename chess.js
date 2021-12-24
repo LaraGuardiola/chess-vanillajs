@@ -3,10 +3,10 @@ let lastMovedStartPos;
 let lastMovedEndPos;
 let tiles = document.querySelectorAll('.box')
 let pieces = document.querySelectorAll('.piece')
-let blackPieces = document.querySelectorAll('.black')
-let whitePieces = document.querySelectorAll('.white')
-let blackSection = document.querySelector('.blackSection')
-let whiteSection = document.querySelector('.whiteSection')
+let sections = document.querySelectorAll('.section')
+let stats = document.querySelector('.stats')
+let blackSection = document.querySelector('#blackSection')
+let whiteSection = document.querySelector('#whiteSection')
 let setEvent = (...args) => tiles.forEach(tile => tile.addEventListener(...args));
 
 //*EVENTS
@@ -47,7 +47,6 @@ function ondragleave(event){
 
 function ondrop(event){
   changeTurn()
-
   lastMovedEndPos = event.target
 	lastMovedEndPos.classList.remove("ondragover")
   lastMovedEndPos.style.border = "3px solid black"
@@ -62,20 +61,18 @@ function ondrop(event){
 
 function changeTurn(){
   pieces.forEach(piece => {
-    if(piece.getAttribute("draggable") == "true"){
-      piece.setAttribute("draggable", false)
-      whiteSection.style.display = "none"
-      blackSection.style.display = "block"
-    }else{
-      piece.setAttribute("draggable", true)
-      whiteSection.style.display = "block"
-      blackSection.style.display = "none"
-    }
+    let draggableToggle = piece.getAttribute("draggable") === 'true' ? 'false' : 'true'
+    piece.setAttribute('draggable',draggableToggle)
   })
+  updateTurnSections()
 }
 
-/*function hasWhiteMoved(){
-  let draggableAttr = document.querySelectorAll('.piece').getAttribute('draggable')
-  let turnToggle = draggableAttr === 'false' ? 'true' : 'false'
-}*/
-
+function updateTurnSections(){
+  if(whiteSection.style.display === "none" && blackSection.style.display === "block"){
+    whiteSection.style.display = "block"
+    blackSection.style.display = "none"
+  }else{
+    whiteSection.style.display = "none"
+    blackSection.style.display = "block"
+  }
+}
