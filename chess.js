@@ -7,13 +7,12 @@ let pieces = document.querySelectorAll('.piece')
 let blackSection = document.querySelector('#blackSection')
 let whiteSection = document.querySelector('#whiteSection')
 let piecesCounter = {
-  tiles : tilesArray.map(tile => 0),
+  tiles : tilesArray.map(() => 0),
   addPieceTurn : index => {
     piecesCounter.tiles[index]++
   }
 }
 let setEvent = (...args) => tiles.forEach(tile => tile.addEventListener(...args));
-
 
 //*EVENTS
 
@@ -118,20 +117,36 @@ function pawn(event){
       tilesArray[indexPiece - 8].classList.add('ondragstart')
       tilesArray[indexPiece - 16].classList.add('ondragstart')
     }else{
-      tilesArray[indexPiece - 8].classList.add('ondragstart')
+      if(checkCollision(indexPiece - 8)){ //checks if in front there's a piece 
+        return
+      }else{
+        tilesArray[indexPiece - 8].classList.add('ondragstart')
+      }
     }
   }else{
     if(isPawnFirstTurn(indexPiece)){
       tilesArray[indexPiece + 8].classList.add('ondragstart')
       tilesArray[indexPiece + 16].classList.add('ondragstart')
     }else{
-      tilesArray[indexPiece + 8].classList.add('ondragstart')
+      if(checkCollision(indexPiece + 8)){
+        return
+      }else{
+        tilesArray[indexPiece + 8].classList.add('ondragstart')
+      }
     }
   }
 }
 
 function isPawnFirstTurn(index){
   if(piecesCounter.tiles[index] === 0){
+    return true
+  }else{
+    return false
+  }
+}
+
+function checkCollision(index){
+  if(tilesArray[index].hasChildNodes()){
     return true
   }else{
     return false
