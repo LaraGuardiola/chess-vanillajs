@@ -2,28 +2,39 @@ let dragged;
 let lastMovedStartPos;
 let lastMovedEndPos;
 let tiles = document.querySelectorAll('.box')
+let tilesArray = [].slice.call(document.querySelectorAll('.box')) //as an array you can get access to indexOf method
 let pieces = document.querySelectorAll('.piece')
-let sections = document.querySelectorAll('.section')
-let stats = document.querySelector('.stats')
 let blackSection = document.querySelector('#blackSection')
 let whiteSection = document.querySelector('#whiteSection')
+let piecesCounter = {
+  tiles : tilesArray.map(tile => 0),
+  addPieceTurn : index => {
+    piecesCounter.tiles[index]++
+  }
+}
 let setEvent = (...args) => tiles.forEach(tile => tile.addEventListener(...args));
+
 
 //*EVENTS
 
 tiles.forEach(() =>{
+  setEvent('click', removeTileBackgrounds,false) //workaround to fix multiple backgrounds if dragged piece is returned to its original place 
   setEvent('dragstart', ondragstart, false)
   setEvent('dragover', ondragover, false)
   setEvent('dragleave', ondragleave, false)
   setEvent('drop', ondrop, false)
 })
 
-//*FUNCTIONS
+//* DRAG AND DROP FUNCTIONS
 
 function ondragstart(event){
+  
+  checkPiece(event)
+  
   dragged = event.target;
   lastMovedStartPos = dragged.parentNode;
   lastMovedStartPos.style.border = "3px solid black"
+
   //first time playing lastMovedEndPos is not initialized so this if is necessary to catch the undefined it was going to give otherwise
   if(lastMovedEndPos != null){
     lastMovedEndPos.style.removeProperty("border")
@@ -46,7 +57,10 @@ function ondragleave(event){
 }
 
 function ondrop(event){
+  removeTileBackgrounds()
   changeTurn()
+  piecesCounter.addPieceTurn(tilesArray.indexOf(event.target)) //add 1 to the counter meaning pawn has already moved at least once
+
   lastMovedEndPos = event.target
 	lastMovedEndPos.classList.remove("ondragover")
   lastMovedEndPos.style.border = "3px solid black"
@@ -58,6 +72,8 @@ function ondrop(event){
 		event.target.appendChild(dragged);  
 	}
 }
+
+/* UI FUNCTIONS */
 
 function changeTurn(){
   pieces.forEach(piece => {
@@ -74,5 +90,50 @@ function updateTurnSections(){
   }else{
     whiteSection.style.display = "none"
     blackSection.style.display = "block"
+  }
+}
+
+function removeTileBackgrounds(){
+  tilesArray.forEach(tile =>{
+    if(tile.classList.contains("ondragstart")){
+      tile.classList.remove("ondragstart")
+    }
+  })
+}
+
+/* GAMEPLAY FUNCTIONS */
+
+function checkPiece(event){
+  if(event.target.classList.contains('pawn')){
+    pawn(event)
+  }else{
+    console.log("not a pawn")
+  }
+}
+
+function pawn(event){
+  let indexPiece = tilesArray.indexOf(event.target.parentNode)
+  if(event.target.classList.contains('white')){
+    if(isPawnFirstTurn(indexPiece)){
+      tilesArray[indexPiece - 8].classList.add('ondragstart')
+      tilesArray[indexPiece - 16].classList.add('ondragstart')
+    }else{
+      tilesArray[indexPiece - 8].classList.add('ondragstart')
+    }
+  }else{
+    if(isPawnFirstTurn(indexPiece)){
+      tilesArray[indexPiece + 8].classList.add('ondragstart')
+      tilesArray[indexPiece + 16].classList.add('ondragstart')
+    }else{
+      tilesArray[indexPiece + 8].classList.add('ondragstart')
+    }
+  }
+}
+
+function isPawnFirstTurn(index){
+  if(piecesCounter.tiles[index] === 0){
+    return true
+  }else{
+    return false
   }
 }
