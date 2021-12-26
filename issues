@@ -1,3 +1,4 @@
 1. background showing when dragging elements. SOLUTION: add transform: translate(0,0) to draggable element
 2. how to avoid collision if there is already a piece in a tile (and avoid its css effects) SOLUTION: add correct if statements in dragover and drop
 3. how to program turns between black and white
+4. how to program specific movement for paws, avoid collisions in pawn's first turn, solve multiple border in same color pieces

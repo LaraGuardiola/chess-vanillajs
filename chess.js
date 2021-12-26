@@ -85,6 +85,8 @@ function changeTurn(){
   updateTurnSections()
 }
 
+let displayToggle = whiteSection.style.display === "block" ? "none" : "block"
+
 function updateTurnSections(){
   if(whiteSection.style.display === "none" && blackSection.style.display === "block"){
     whiteSection.style.display = "block"
@@ -106,11 +108,15 @@ function removeTileBackgrounds(){
 /* GAMEPLAY FUNCTIONS */
 
 function checkPiece(event){
-  if(event.target.classList.contains('pawn')){
+  if(isPawn(event)){
     pawn(event)
   }else{
     console.log("not a pawn")
   }
+}
+
+function isPawn(event){
+  return event.target.classList.contains('pawn') ? true : false
 }
 
 function pawn(event){
@@ -140,10 +146,12 @@ function pawn(event){
   }
 }
 
+//checks if pawn has already moved
 function isPawnFirstTurn(index){
   return piecesCounter.tiles[index] === 0 ? true : false
 }
 
+//checks if tile has a piece inside
 function checkCollision(index){
   return tilesArray[index].hasChildNodes() ? true : false
 }
