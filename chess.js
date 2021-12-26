@@ -27,7 +27,6 @@ tiles.forEach(() =>{
 //* DRAG AND DROP FUNCTIONS
 
 function ondragstart(event){
-  
   checkPiece(event)
   
   dragged = event.target;
@@ -43,10 +42,7 @@ function ondragstart(event){
 function ondragover(event){
   event.preventDefault()
   if (event.target.getAttribute("draggable") === "true" || event.target.hasChildNodes()){ //if you are over a span piece or a div box then drop not allowed
-    if(!event.target.classList.contains('dragstart')){
-      console.log('enters')
-      event.dataTransfer.dropEffect = "none"; // dropping is not allowed
-    }
+    event.dataTransfer.dropEffect = "none"; // dropping is not allowed
   }else{
     event.dataTransfer.dropEffect = "all";  // drop it
     event.target.classList.add("ondragover") 
@@ -61,12 +57,8 @@ function ondragleave(event){
 function ondrop(event){
   removeTileBackgrounds()
   changeTurn(event)  
-
-  //if you are over a chess tile and drop it then removes the child from the parent and appends to the selected tile
-  if (lastMovedEndPos.className === 'box' && lastMovedEndPos.childElementCount === 0) { 
-    dragged.parentNode.removeChild(dragged);
-		event.target.appendChild(dragged);  
-	}
+  dragged.parentNode.removeChild(dragged);
+	event.target.appendChild(dragged);  
 }
 
 /* UI FUNCTIONS */
@@ -129,11 +121,11 @@ function pawnMovement(event){
   let indexPiece = tilesArray.indexOf(event.target.parentNode)
   let type = event.target.className
 
-  if(type === 'piece white pawn'){
+  if(type === 'piece white pawn'){ //WHITE PAWN
     firstMove = indexPiece - 16
     normalMove = indexPiece - 8
   }else{
-    firstMove = indexPiece + 16
+    firstMove = indexPiece + 16   //BLACK PAWN
     normalMove = indexPiece + 8
   }
 
