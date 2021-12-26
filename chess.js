@@ -41,11 +41,11 @@ function ondragstart(event){
 
 function ondragover(event){
   event.preventDefault()
-  if (event.target.getAttribute("draggable") === "true" || event.target.hasChildNodes()){ //if you are over a span piece or a div box then drop not allowed
+  if (event.target.getAttribute("draggable") === "true" || event.target.hasChildNodes() || event.target.className === "box"){ //if you are over a span piece or a div box then drop not allowed
     event.dataTransfer.dropEffect = "none"; // dropping is not allowed
   }else{
     event.dataTransfer.dropEffect = "all";  // drop it
-    event.target.classList.add("ondragover") 
+    event.target.classList.add("ondragover") //useless atm, need to change class to another one
   }        
 }
 
