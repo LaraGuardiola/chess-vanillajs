@@ -120,45 +120,39 @@ function isPawn(event){
   return event.target.classList.contains('pawn') ? true : false
 }
 
-function pawn(event){
+function pawn(event){                       
+  pawnMovement(event)
+}
+
+function pawnMovement(event){
+  let firstMove, normalMove
   let indexPiece = tilesArray.indexOf(event.target.parentNode)
-  if(event.target.classList.contains('white')){   // WHITE PIECES
-    if(isPawnFirstTurn(indexPiece)){
-      if(checkCollision(indexPiece - 8)){
-        return
-      }else{
-        if(checkCollision(indexPiece - 16)){
-          tilesArray[indexPiece - 8].classList.add('ondragstart')
-        }else{
-          tilesArray[indexPiece - 8].classList.add('ondragstart')
-          tilesArray[indexPiece - 16].classList.add('ondragstart')  
-        }
-      }
+  let type = event.target.className
+
+  if(type === 'piece white pawn'){
+    firstMove = indexPiece - 16
+    normalMove = indexPiece - 8
+  }else{
+    firstMove = indexPiece + 16
+    normalMove = indexPiece + 8
+  }
+
+  if(isPawnFirstTurn(indexPiece)){
+    if(checkCollision(normalMove)){
+      return
     }else{
-      if(checkCollision(indexPiece - 8)){ //checks if in front there's a piece 
-        return
+      if(checkCollision(firstMove)){
+        tilesArray[normalMove].classList.add('ondragstart')
       }else{
-        tilesArray[indexPiece - 8].classList.add('ondragstart')
+        tilesArray[normalMove].classList.add('ondragstart')
+        tilesArray[firstMove].classList.add('ondragstart')  
       }
     }
-  }else{                                          // BLACK PIECES
-    if(isPawnFirstTurn(indexPiece)){
-      if(checkCollision(indexPiece + 8)){
-        return
-      }else{
-        if(checkCollision(indexPiece + 16)){
-          tilesArray[indexPiece + 8].classList.add('ondragstart')
-        }else{
-          tilesArray[indexPiece + 8].classList.add('ondragstart')
-          tilesArray[indexPiece + 16].classList.add('ondragstart')  
-        }
-      }
+  }else{
+    if(checkCollision(normalMove)){ //checks if in front there's a piece 
+      return
     }else{
-      if(checkCollision(indexPiece + 8)){
-        return
-      }else{
-        tilesArray[indexPiece + 8].classList.add('ondragstart')
-      }
+      tilesArray[normalMove].classList.add('ondragstart')
     }
   }
 }
