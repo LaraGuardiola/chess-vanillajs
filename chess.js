@@ -60,13 +60,7 @@ function ondragleave(event){
 
 function ondrop(event){
   removeTileBackgrounds()
-  changeTurn()
-  piecesCounter.addPieceTurn(tilesArray.indexOf(event.target)) //add 1 to the counter meaning pawn has already moved at least once
-
-  lastMovedEndPos = event.target
-	lastMovedEndPos.classList.remove("ondragover")
-  lastMovedEndPos.style.border = "3px solid black"
-  lastMovedStartPos.style.removeProperty("border")  
+  changeTurn(event)  
 
   //if you are over a chess tile and drop it then removes the child from the parent and appends to the selected tile
   if (lastMovedEndPos.className === 'box' && lastMovedEndPos.childElementCount === 0) { 
@@ -77,15 +71,22 @@ function ondrop(event){
 
 /* UI FUNCTIONS */
 
-function changeTurn(){
+function changeTurn(event){
   pieces.forEach(piece => {
     let draggableToggle = piece.getAttribute("draggable") === 'true' ? 'false' : 'true'
     piece.setAttribute('draggable',draggableToggle)
   })
+  piecesCounter.addPieceTurn(tilesArray.indexOf(event.target)) //add 1 to the counter meaning pawn has already moved at least once
+  setStylesForNextTurn(event)
   updateTurnSections()
 }
 
-let displayToggle = whiteSection.style.display === "block" ? "none" : "block"
+function setStylesForNextTurn(event){
+  lastMovedEndPos = event.target
+	lastMovedEndPos.classList.remove("ondragover")
+  lastMovedEndPos.style.border = "3px solid black"
+  lastMovedStartPos.style.removeProperty("border")
+}
 
 function updateTurnSections(){
   if(whiteSection.style.display === "none" && blackSection.style.display === "block"){
