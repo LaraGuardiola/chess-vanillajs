@@ -124,8 +124,16 @@ function pawn(event){
   let indexPiece = tilesArray.indexOf(event.target.parentNode)
   if(event.target.classList.contains('white')){   // WHITE PIECES
     if(isPawnFirstTurn(indexPiece)){
-      tilesArray[indexPiece - 8].classList.add('ondragstart')
-      tilesArray[indexPiece - 16].classList.add('ondragstart')
+      if(checkCollision(indexPiece - 8)){
+        return
+      }else{
+        if(checkCollision(indexPiece - 16)){
+          tilesArray[indexPiece - 8].classList.add('ondragstart')
+        }else{
+          tilesArray[indexPiece - 8].classList.add('ondragstart')
+          tilesArray[indexPiece - 16].classList.add('ondragstart')  
+        }
+      }
     }else{
       if(checkCollision(indexPiece - 8)){ //checks if in front there's a piece 
         return
@@ -135,8 +143,16 @@ function pawn(event){
     }
   }else{                                          // BLACK PIECES
     if(isPawnFirstTurn(indexPiece)){
-      tilesArray[indexPiece + 8].classList.add('ondragstart')
-      tilesArray[indexPiece + 16].classList.add('ondragstart')
+      if(checkCollision(indexPiece + 8)){
+        return
+      }else{
+        if(checkCollision(indexPiece + 16)){
+          tilesArray[indexPiece + 8].classList.add('ondragstart')
+        }else{
+          tilesArray[indexPiece + 8].classList.add('ondragstart')
+          tilesArray[indexPiece + 16].classList.add('ondragstart')  
+        }
+      }
     }else{
       if(checkCollision(indexPiece + 8)){
         return
