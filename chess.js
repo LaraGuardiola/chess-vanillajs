@@ -42,8 +42,11 @@ function ondragstart(event){
 
 function ondragover(event){
   event.preventDefault()
-  if (event.target.getAttribute("draggable") == "true" || event.target.hasChildNodes()){ //if you are over a span piece or a div box then drop not allowed
-    event.dataTransfer.dropEffect = "none"; // dropping is not allowed
+  if (event.target.getAttribute("draggable") === "true" || event.target.hasChildNodes()){ //if you are over a span piece or a div box then drop not allowed
+    if(!event.target.classList.contains('dragstart')){
+      console.log('enters')
+      event.dataTransfer.dropEffect = "none"; // dropping is not allowed
+    }
   }else{
     event.dataTransfer.dropEffect = "all";  // drop it
     event.target.classList.add("ondragover") 
@@ -112,7 +115,7 @@ function checkPiece(event){
 
 function pawn(event){
   let indexPiece = tilesArray.indexOf(event.target.parentNode)
-  if(event.target.classList.contains('white')){
+  if(event.target.classList.contains('white')){   // WHITE PIECES
     if(isPawnFirstTurn(indexPiece)){
       tilesArray[indexPiece - 8].classList.add('ondragstart')
       tilesArray[indexPiece - 16].classList.add('ondragstart')
@@ -123,7 +126,7 @@ function pawn(event){
         tilesArray[indexPiece - 8].classList.add('ondragstart')
       }
     }
-  }else{
+  }else{                                          // BLACK PIECES
     if(isPawnFirstTurn(indexPiece)){
       tilesArray[indexPiece + 8].classList.add('ondragstart')
       tilesArray[indexPiece + 16].classList.add('ondragstart')
@@ -138,17 +141,9 @@ function pawn(event){
 }
 
 function isPawnFirstTurn(index){
-  if(piecesCounter.tiles[index] === 0){
-    return true
-  }else{
-    return false
-  }
+  return piecesCounter.tiles[index] === 0 ? true : false
 }
 
 function checkCollision(index){
-  if(tilesArray[index].hasChildNodes()){
-    return true
-  }else{
-    return false
-  }
+  return tilesArray[index].hasChildNodes() ? true : false
 }
