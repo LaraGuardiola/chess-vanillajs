@@ -117,38 +117,43 @@ function pawn(event){
 }
 
 function pawnMovement(event){
-  let firstMove, normalMove, attackMove
+  let firstMove, normalMove, color
   let indexPiece = tilesArray.indexOf(event.target.parentNode)
   let type = event.target.className
 
   if(type === 'piece white pawn'){ //WHITE PAWN
     firstMove = indexPiece - 16
     normalMove = indexPiece - 8
+    color = "white"
   }else{
     firstMove = indexPiece + 16   //BLACK PAWN
     normalMove = indexPiece + 8
+    color = "black"
   }
 
   if(isPawnFirstTurn(indexPiece)){
+    if(checkCollision(normalMove - 1) && !tilesArray[normalMove - 1].firstChild.classList.contains(color)){
+      tilesArray[normalMove - 1].classList.add('ondragstart')
+    }
+    if(checkCollision(normalMove + 1) && !tilesArray[normalMove + 1].firstChild.classList.contains(color)){
+      tilesArray[normalMove + 1].classList.add('ondragstart')
+    }
     if(checkCollision(normalMove)){
       return
     }else{
       if(checkCollision(firstMove)){
         tilesArray[normalMove].classList.add('ondragstart')
-      }
-      if(checkCollision(normalMove - 1)){
-        console.log("puedo atacar?")
-        tilesArray[normalMove - 1].classList.add('ondragstart')
       }else{
         tilesArray[normalMove].classList.add('ondragstart')
         tilesArray[firstMove].classList.add('ondragstart')  
       }
     }
-  }else{
-    if(checkCollision(normalMove - 1)){
+  }
+  else{
+    if(checkCollision(normalMove - 1) && !tilesArray[normalMove - 1].firstChild.classList.contains(color)){
       tilesArray[normalMove - 1].classList.add('ondragstart')
     }
-    if(checkCollision(normalMove + 1)){
+    if(checkCollision(normalMove + 1) && !tilesArray[normalMove + 1].firstChild.classList.contains(color)){
       tilesArray[normalMove + 1].classList.add('ondragstart')
     }
     if(checkCollision(normalMove)){ //checks if in front there's a piece 
