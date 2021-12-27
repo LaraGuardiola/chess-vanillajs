@@ -1,6 +1,7 @@
-let dragged;
-let lastMovedStartPos;
-let lastMovedEndPos;
+let dragged
+let lastMovedStartPos
+let lastMovedEndPos
+let color
 let tiles = document.querySelectorAll('.box')
 let tilesArray = [].slice.call(document.querySelectorAll('.box')) //as an array you can get access to indexOf method
 let pieces = document.querySelectorAll('.piece')
@@ -29,8 +30,8 @@ tiles.forEach(() =>{
 function ondragstart(event){
   checkPiece(event)
   
-  dragged = event.target;
-  lastMovedStartPos = dragged.parentNode;
+  dragged = event.target
+  lastMovedStartPos = dragged.parentNode
   lastMovedStartPos.style.border = "3px solid black"
 
   //first time playing lastMovedEndPos is not initialized so this if is necessary to catch the undefined it was going to give otherwise
@@ -41,11 +42,11 @@ function ondragstart(event){
 
 function ondragover(event){
   event.preventDefault()
-  if (event.target.getAttribute("draggable") === "true" || event.target.hasChildNodes() || event.target.className === "box"){ //if you are over a span piece or a div box then drop not allowed
-    event.dataTransfer.dropEffect = "none"; // dropping is not allowed
+  if (event.target.className === "box" || !event.target.classList.contains('ondragstart')){ //if you are over a span piece or a div box then drop not allowed
+    event.dataTransfer.dropEffect = "none" // dropping is not allowed
   }else{
-    event.dataTransfer.dropEffect = "all";  // drop it
-    event.target.classList.add("ondragover") //useless atm, need to change class to another one
+    event.dataTransfer.dropEffect = "all"  // drop it
+    event.target.classList.add("ondragover") 
   }        
 }
 
@@ -58,6 +59,9 @@ function ondrop(event){
   removeTileBackgrounds()
   changeTurn(event)  
   dragged.parentNode.removeChild(dragged);
+  if(event.target.hasChildNodes()){ //if there's a piece at drop, eliminates the existing piece
+    event.target.removeChild(event.target.firstChild)
+  }
 	event.target.appendChild(dragged);  
 }
 
@@ -117,7 +121,7 @@ function pawn(event){
 }
 
 function pawnMovement(event){
-  let firstMove, normalMove, color
+  let firstMove, normalMove
   let indexPiece = tilesArray.indexOf(event.target.parentNode)
   let type = event.target.className
 
@@ -131,8 +135,8 @@ function pawnMovement(event){
     color = "black"
   }
 
-  if(isPawnFirstTurn(indexPiece)){
-    if(checkCollision(normalMove - 1) && !tilesArray[normalMove - 1].firstChild.classList.contains(color)){
+  if(isPawnFirstTurn(indexPiece)){ //FIRST TURN
+    if(checkCollision(normalMove - 1) && !tilesArray[normalMove - 1].firstChild.classList.contains(color)){   //if theres a piece in attack reach and has different color
       tilesArray[normalMove - 1].classList.add('ondragstart')
     }
     if(checkCollision(normalMove + 1) && !tilesArray[normalMove + 1].firstChild.classList.contains(color)){
@@ -148,8 +152,7 @@ function pawnMovement(event){
         tilesArray[firstMove].classList.add('ondragstart')  
       }
     }
-  }
-  else{
+  }else{  //NORMAL TURN
     if(checkCollision(normalMove - 1) && !tilesArray[normalMove - 1].firstChild.classList.contains(color)){
       tilesArray[normalMove - 1].classList.add('ondragstart')
     }
