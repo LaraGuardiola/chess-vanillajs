@@ -29,7 +29,6 @@ tiles.forEach(() =>{
 
 function ondragstart(event){
   checkPiece(event)
-  
   dragged = event.target
   lastMovedStartPos = dragged.parentNode
   lastMovedStartPos.style.border = "3px solid black"
@@ -42,12 +41,12 @@ function ondragstart(event){
 
 function ondragover(event){
   event.preventDefault()
-  if (event.target.className === "box" || !event.target.classList.contains('ondragstart')){ //if you are over a span piece or a div box then drop not allowed
+  if(event.target.classList.contains('ondragstart') || event.target.parentNode.classList.contains('ondragstart')){ //movement possible if tile has ondragstart or span's father has it
+    event.dataTransfer.dropEffect = "all"  //drop it
+  }else{ 
     event.dataTransfer.dropEffect = "none" // dropping is not allowed
-  }else{
-    event.dataTransfer.dropEffect = "all"  // drop it
-    event.target.classList.add("ondragover") 
-  }        
+  }
+  //event.target.classList.add("ondragover")   
 }
 
 function ondragleave(event){
@@ -57,10 +56,16 @@ function ondragleave(event){
 
 function ondrop(event){
   removeTileBackgrounds()
-  changeTurn(event)  
+  changeTurn(event) 
   dragged.parentNode.removeChild(dragged);
-  if(event.target.hasChildNodes()){ //if there's a piece at drop, eliminates the existing piece
+  if(event.target.hasChildNodes()){ 
     event.target.removeChild(event.target.firstChild)
+  }
+
+  if(event.target.classList.contains('piece')){
+    console.log('entra')
+    event.target.replaceWith(dragged)
+    return
   }
 	event.target.appendChild(dragged);  
 }
@@ -136,7 +141,7 @@ function pawnMovement(event){
   }
 
   if(isPawnFirstTurn(indexPiece)){ //FIRST TURN
-    if(checkCollision(normalMove - 1) && !tilesArray[normalMove - 1].firstChild.classList.contains(color)){   //if theres a piece in attack reach and has different color
+    if(checkCollision(normalMove - 1) && !tilesArray[normalMove - 1].firstChild.classList.contains(color)){   //if theres a piece within attack reach and has different color
       tilesArray[normalMove - 1].classList.add('ondragstart')
     }
     if(checkCollision(normalMove + 1) && !tilesArray[normalMove + 1].firstChild.classList.contains(color)){

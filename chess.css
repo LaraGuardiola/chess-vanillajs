@@ -113,10 +113,9 @@ body {
   /*DRAG AND DROP*/
 
   .ondragover{
-    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-    background-size: 400% 400%;
-    animation: gradient 1.5s ease infinite;
-    opacity: 0.5;
+    border: 3px solid #23a6d5;
+    box-shadow: 0 0 1px 1px #23a6d5;
+    animation: bordercolor 4s linear infinite;
   }
   
 @keyframes gradient {
@@ -129,6 +128,18 @@ body {
     100% {
         background-position: 0% 50%;
     }
+}
+
+@keyframes bordercolor {
+  0% {
+    border-color: #23a6d5;
+  }
+  50% {
+    border-color: #e73c7e;
+  }
+  100% {
+    border-color: #23a6d5;
+  }
 }
 
 /* TILE BACKGROUNDS */
