@@ -117,7 +117,7 @@ function pawn(event){
 }
 
 function pawnMovement(event){
-  let firstMove, normalMove
+  let firstMove, normalMove, attackMove
   let indexPiece = tilesArray.indexOf(event.target.parentNode)
   let type = event.target.className
 
@@ -135,12 +135,22 @@ function pawnMovement(event){
     }else{
       if(checkCollision(firstMove)){
         tilesArray[normalMove].classList.add('ondragstart')
+      }
+      if(checkCollision(normalMove - 1)){
+        console.log("puedo atacar?")
+        tilesArray[normalMove - 1].classList.add('ondragstart')
       }else{
         tilesArray[normalMove].classList.add('ondragstart')
         tilesArray[firstMove].classList.add('ondragstart')  
       }
     }
   }else{
+    if(checkCollision(normalMove - 1)){
+      tilesArray[normalMove - 1].classList.add('ondragstart')
+    }
+    if(checkCollision(normalMove + 1)){
+      tilesArray[normalMove + 1].classList.add('ondragstart')
+    }
     if(checkCollision(normalMove)){ //checks if in front there's a piece 
       return
     }else{
