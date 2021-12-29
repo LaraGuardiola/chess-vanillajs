@@ -186,10 +186,12 @@ function pawnMovement(event){
         tilesArray[normalMove - 1].classList.add('ondragstart')
       }
     }
-    if((indexPiece + 1) % 8 === 0){
-      tilesArray[normalMove + 1].classList.remove('ondragstart')
-    }else{
-      tilesArray[normalMove + 1].classList.add('ondragstart')
+    if(checkCollision(normalMove + 1) && !tilesArray[normalMove + 1].firstChild.classList.contains(color)){
+      if((indexPiece +1) % 8 === 0){
+        tilesArray[normalMove + 1].classList.remove('ondragstart')
+      }else{
+        tilesArray[normalMove + 1].classList.add('ondragstart')
+      }
     }
     if(checkCollision(normalMove)){ //checks if in front there's a piece 
       return
