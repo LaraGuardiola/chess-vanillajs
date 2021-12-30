@@ -163,18 +163,25 @@ function pawnMovement(event){
 
   if(isPawnFirstTurn(indexPiece)){ //FIRST TURN
     if(checkCollision(normalMove - 1) && !tilesArray[normalMove - 1].firstChild.classList.contains(color)){   //if theres a piece within attack reach and has different color
-      tilesArray[normalMove - 1].classList.add('ondragstart')
+      if(indexPiece % 8 === 0){
+        tilesArray[normalMove - 1].classList.remove('ondragstart')
+      }else{
+        tilesArray[normalMove - 1].classList.add('ondragstart')
+      }
     }
     if(checkCollision(normalMove + 1) && !tilesArray[normalMove + 1].firstChild.classList.contains(color)){
-      tilesArray[normalMove + 1].classList.add('ondragstart')
+      if((indexPiece +1) % 8 === 0){
+        tilesArray[normalMove + 1].classList.remove('ondragstart')
+      }else{
+        tilesArray[normalMove + 1].classList.add('ondragstart')
+      }
     }
     if(checkCollision(normalMove)){
       return
     }else{
       if(checkCollision(firstMove)){
         tilesArray[normalMove].classList.add('ondragstart')
-      }else{
-        tilesArray[normalMove].classList.add('ondragstart')
+      }else{ndragstart')
         tilesArray[firstMove].classList.add('ondragstart')  
       }
     }
@@ -190,6 +197,7 @@ function pawnMovement(event){
       if((indexPiece +1) % 8 === 0){
         tilesArray[normalMove + 1].classList.remove('ondragstart')
       }else{
+        tilesArray[normalMove].classList.add('o
         tilesArray[normalMove + 1].classList.add('ondragstart')
       }
     }
