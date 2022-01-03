@@ -240,16 +240,33 @@ function towerMovement(event){
     }
   })
 
-  let checkRowPieces2 = rows[rowPos].map(tile =>{ //returns tiles with sons (for a row)
-    if(tile.hasChildNodes()){
-      return rows[rowPos].indexOf(tile)
-    }
-  })
-
-  console.log(checkRowPieces2, indexRow)
-
-
-  
+  console.log(checkRowPieces, indexRow)
 }
 
+let piecesArray = [undefined, 1, undefined, 2, undefined, undefined, 3, undefined];
+let pieceToMove = 2;
+let nonEmptySpaces = []
+// Get non undefined spaces
+for (let i = 0; i < piecesArray.length; i++) {
+if (piecesArray[i] != undefined)
+    nonEmptySpaces.push(i);
+}
+let pieceToMoveIndex = piecesArray.indexOf(pieceToMove);
+let pieceRelativeToOthers = nonEmptySpaces.indexOf(pieceToMoveIndex); //[1,3,6] it will return a 2 (so it has 2 pieces in the same row)
+let movementArray = []
+// Get array with undefineds around the used position
+if (pieceRelativeToOthers == 0)
+    movementArray = piecesArray.slice(0, nonEmptySpaces[pieceRelativeToOthers + 1]);
+else {
+    movementArray = piecesArray.slice(nonEmptySpaces[pieceRelativeToOthers - 1] + 1, nonEmptySpaces[pieceRelativeToOthers + 1]);
+}
 
+console.log(nonEmptySpaces[pieceRelativeToOthers + 1])
+
+function towerHorizontalMove(arrayRow){
+  let nonEmptySpaces = []
+  for (let i = 0; i < arrayRow.length; i++) {
+    if (arrayRow[i] != undefined)
+        nonEmptySpaces.push(i);
+  }
+}
