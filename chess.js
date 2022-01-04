@@ -112,12 +112,15 @@ function removeTileBackgrounds(){
 
 //* GAMEPLAY FUNCTIONS */
 
-function checkPiece(event){
+function checkPiece(event){ //can be refactored with a switch statement
   if(isPawn(event)){
     pawn(event)
   }
   if(isTower(event)){
     tower(event)
+  }
+  if(isKnight(event)){
+    knight(event)
   }
 }
 
@@ -129,12 +132,20 @@ function isTower(event){
   return event.target.classList.contains('tower') ? true : false
 }
 
+function isKnight(event){
+  return event.target.classList.contains('knight') ? true : false
+}
+
 function pawn(event){                       
   pawnMovement(event)
 }
 
 function tower(event){
   towerMovement(event)
+}
+
+function knight(event){
+  knightMovement(event)
 }
 
 function pawnMovement(event){
@@ -242,7 +253,6 @@ function getColumn(event){
       column.push(rows[i][indexRow])
     }
   }
-  console.log(column)
 }
 
 function towerMovement(event){
@@ -340,7 +350,10 @@ function towerVerticalMove(event){
       tile.classList.add('ondragstart')
     }
   })
+}
 
+function knightMovement(event){
+  
 }
 
 
