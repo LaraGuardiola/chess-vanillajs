@@ -213,8 +213,14 @@ function checkCollision(index){
   return tilesArray[index].hasChildNodes() ? true : false
 }
 
+//checks if inside the tiles of a row there's a piece
 function checkRowCollision(rowIndex,index){
   return rows[rowIndex][index].hasChildNodes() ? true : false
+}
+
+//checks if inside the tiles of a column there's a piece
+function checkColumnCollision(index){
+  return column[index].hasChildNodes() ? true : false
 }
 
 function createRows(arr, numGroups) {
@@ -295,27 +301,39 @@ function towerHorizontalMove(event){
 }
 
 function towerVerticalMove(event){
-  let indexPiece = tilesArray.indexOf(event.target.parentNode)
-  let rowPos = Math.floor(indexPiece / 8)
-  let indexRow = rows[rowPos].indexOf(event.target.parentNode)
-  let nonEmptySpaces = []
   getColumn(event)
+  let nonEmptySpaces = []
+  let indexColumn = column.indexOf(event.target.parentNode)
 
   for (let i = 0; i < column.length; i++) { 
     if (column[i].hasChildNodes())
         nonEmptySpaces.push(i);
   }
 
-  let pieceRelativeToOthers = nonEmptySpaces.indexOf(indexRow) //gives index position for the array of pieces
+  let pieceRelativeOthers = nonEmptySpaces.indexOf(indexColumn) //gives index position for the array of pieces
   let movementArray = []
 
-  if (pieceRelativeToOthers === 0)
-    movementArray = column.slice(0, nonEmptySpaces[pieceRelativeToOthers + 1])
+  if (pieceRelativeOthers === 0)
+    movementArray = column.slice(0, nonEmptySpaces[pieceRelativeOthers + 1])
   else {
-    movementArray = column.slice(nonEmptySpaces[pieceRelativeToOthers - 1] + 1, nonEmptySpaces[pieceRelativeToOthers + 1])
+    movementArray = column.slice(nonEmptySpaces[pieceRelativeOthers - 1] + 1, nonEmptySpaces[pieceRelativeOthers + 1])
   }
 
-  console.log(movementArray)
+  let distanceBetweenLeft = nonEmptySpaces[pieceRelativeOthers] - nonEmptySpaces[pieceRelativeOthers - 1]
+  let distanceBetweenRight = nonEmptySpaces[pieceRelativeOthers + 1] - nonEmptySpaces[pieceRelativeOthers]
+
+  if(isNaN(distanceBetweenLeft)){ //otherwise index could be less than 0, giving error
+    distanceBetweenLeft = 0
+  }
+  if(isNaN(distanceBetweenRight)){ //like before, if index is out of bound is going to return an error
+    distanceBetweenRight = 0
+  }
+  if(checkColumnCollision(indexColumn - distanceBetweenLeft) && !column[indexColumn - distanceBetweenLeft].firstChild.classList.contains(color)){
+    column[indexColumn - distanceBetweenLeft].classList.add('ondragstart')
+  }
+  if(checkColumnCollision(indexColumn + distanceBetweenRight) && !column[indexColumn + distanceBetweenRight].firstChild.classList.contains(color)){
+    column[indexColumn + distanceBetweenRight].classList.add('ondragstart')
+  }
 
   movementArray.forEach(tile => {
     if(!tile.hasChildNodes()){
