@@ -229,8 +229,12 @@ function getColumn(event){
   let rowPos = Math.floor(indexPiece / 8)
   let indexRow = rows[rowPos].indexOf(event.target.parentNode)
 
-  for(let i = 0; i < rows.length; i++){
-    column.push(rows[i][indexRow])
+  if(column.length === 8){ //without this, every time you drag the piece it keeps pushing
+    return
+  }else{
+    for(let i = 0; i < rows.length; i++){
+      column.push(rows[i][indexRow])
+    }
   }
   console.log(column)
 }
@@ -242,8 +246,8 @@ function towerMovement(event){
   }else{
     color = "black"
   }
-  getColumn(event)
   towerHorizontalMove(event)
+  towerVerticalMove(event)
 }
 
 function towerHorizontalMove(event){
@@ -290,37 +294,63 @@ function towerHorizontalMove(event){
   })
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function towerVerticalMove(event){
-  for(let i = 0; i < tilesArray.length; i++){
+  let indexPiece = tilesArray.indexOf(event.target.parentNode)
+  let rowPos = Math.floor(indexPiece / 8)
+  let indexRow = rows[rowPos].indexOf(event.target.parentNode)
+  let nonEmptySpaces = []
+  getColumn(event)
 
+  for (let i = 0; i < column.length; i++) { 
+    if (column[i].hasChildNodes())
+        nonEmptySpaces.push(i);
   }
+
+  let pieceRelativeToOthers = nonEmptySpaces.indexOf(indexRow) //gives index position for the array of pieces
+  let movementArray = []
+
+  if (pieceRelativeToOthers === 0)
+    movementArray = column.slice(0, nonEmptySpaces[pieceRelativeToOthers + 1])
+  else {
+    movementArray = column.slice(nonEmptySpaces[pieceRelativeToOthers - 1] + 1, nonEmptySpaces[pieceRelativeToOthers + 1])
+  }
+
+  console.log(movementArray)
+
+  movementArray.forEach(tile => {
+    if(!tile.hasChildNodes()){
+      tile.classList.add('ondragstart')
+    }
+  })
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

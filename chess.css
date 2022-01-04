@@ -86,7 +86,6 @@ body {
     grid-row-start: 10;
     grid-row-end: 10;
   }
-  
   .box:nth-child(-2n+9), 
   .box:nth-child(9) ~ div:nth-child(-2n+16), 
   .box:nth-child(17) ~ div:nth-child(-2n+25), 
