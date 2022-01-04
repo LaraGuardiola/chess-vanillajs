@@ -6,6 +6,7 @@ let firstMove, normalMove //pawn
 let tiles = document.querySelectorAll('.box')
 let tilesArray = [].slice.call(document.querySelectorAll('.box')) //as an array you can get access to indexOf method
 let rows = createRows(tilesArray,8)
+let column = []
 let pieces = document.querySelectorAll('.piece')
 let blackSection = document.querySelector('#blackSection')
 let whiteSection = document.querySelector('#whiteSection')
@@ -220,17 +221,28 @@ function createRows(arr, numGroups) {
   const perGroup = Math.ceil(arr.length / numGroups)   //in this case, 8 per group (8x8 = 64 tiles)
   return new Array(numGroups)
     .fill('')
-    .map((_, i) => arr.slice(i * perGroup, (i + 1) * perGroup));
+    .map((_, i) => arr.slice(i * perGroup, (i + 1) * perGroup))
+}
+
+function getColumn(event){
+  let indexPiece = tilesArray.indexOf(event.target.parentNode)
+  let rowPos = Math.floor(indexPiece / 8)
+  let indexRow = rows[rowPos].indexOf(event.target.parentNode)
+
+  for(let i = 0; i < rows.length; i++){
+    column.push(rows[i][indexRow])
+  }
+  console.log(column)
 }
 
 function towerMovement(event){
   let type = event.target.className
-
   if(type === "piece white tower"){
     color = "white"
   }else{
     color = "black"
   }
+  getColumn(event)
   towerHorizontalMove(event)
 }
 
@@ -258,12 +270,10 @@ function towerHorizontalMove(event){
   let distanceBetweenLeft = nonEmptySpaces[pieceRelativeToOthers] - nonEmptySpaces[pieceRelativeToOthers - 1]
   let distanceBetweenRight = nonEmptySpaces[pieceRelativeToOthers + 1] - nonEmptySpaces[pieceRelativeToOthers]
 
-
-
   if(isNaN(distanceBetweenLeft)){ //otherwise index could be less than 0, giving error
     distanceBetweenLeft = 0
   }
-  if(isNaN(distanceBetweenRight)){ //like before,  if index is out of bound is going to return an error
+  if(isNaN(distanceBetweenRight)){ //like before, if index is out of bound is going to return an error
     distanceBetweenRight = 0
   }
   if(checkRowCollision(rowPos, indexRow - distanceBetweenLeft) && !tilesArray[indexPiece - distanceBetweenLeft].firstChild.classList.contains(color)){
@@ -279,6 +289,7 @@ function towerHorizontalMove(event){
     }
   })
 }
+
 
 
 
