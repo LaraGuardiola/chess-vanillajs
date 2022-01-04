@@ -225,32 +225,91 @@ function createRows(arr, numGroups) {
 
 function towerMovement(event){
   let type = event.target.className
+
+  if(type === "piece white tower"){
+    color = "white"
+  }else{
+    color = "black"
+  }
   towerHorizontalMove(event)
 }
 
 function towerHorizontalMove(event){
   let indexPiece = tilesArray.indexOf(event.target.parentNode)
   let rowPos = Math.floor(indexPiece / 8)
-  let copy = rows[rowPos]
+  let row = rows[rowPos]
   let indexRow = rows[rowPos].indexOf(event.target.parentNode)
   let nonEmptySpaces = []
-  for (let i = 0; i < copy.length; i++) {
-    if (copy[i].hasChildNodes())
+
+  for (let i = 0; i < row.length; i++) { //returns an array with the indexes where pieces are placed
+    if (row[i].hasChildNodes())
         nonEmptySpaces.push(i);
   }
 
-  let pieceRelativeToOthers = nonEmptySpaces.indexOf(indexRow); //[1,3,6] it will return a 2 (so it has 2 pieces in the same row)
+  let pieceRelativeToOthers = nonEmptySpaces.indexOf(indexRow) //gives index position for the array of pieces
   let movementArray = []
 
-  if (pieceRelativeToOthers == 0)
-    movementArray = copy.slice(0, nonEmptySpaces[pieceRelativeToOthers + 1]);
+  if (pieceRelativeToOthers === 0)
+    movementArray = row.slice(0, nonEmptySpaces[pieceRelativeToOthers + 1])
   else {
-    movementArray = copy.slice(nonEmptySpaces[pieceRelativeToOthers - 1] + 1, nonEmptySpaces[pieceRelativeToOthers + 1]);
-  } 
+    movementArray = row.slice(nonEmptySpaces[pieceRelativeToOthers - 1] + 1, nonEmptySpaces[pieceRelativeToOthers + 1])
+  }
 
+  let distanceBetweenLeft = nonEmptySpaces[pieceRelativeToOthers] - nonEmptySpaces[pieceRelativeToOthers - 1]
+  let distanceBetweenRight = nonEmptySpaces[pieceRelativeToOthers + 1] - nonEmptySpaces[pieceRelativeToOthers]
+
+
+
+  if(isNaN(distanceBetweenLeft)){ //otherwise index could be less than 0, giving error
+    distanceBetweenLeft = 0
+  }
+  if(isNaN(distanceBetweenRight)){ //like before,  if index is out of bound is going to return an error
+    distanceBetweenRight = 0
+  }
+  if(checkRowCollision(rowPos, indexRow - distanceBetweenLeft) && !tilesArray[indexPiece - distanceBetweenLeft].firstChild.classList.contains(color)){
+    tilesArray[indexPiece - distanceBetweenLeft].classList.add('ondragstart')
+  }
+  if(checkRowCollision(rowPos, indexRow + distanceBetweenRight) && !tilesArray[indexPiece + distanceBetweenRight].firstChild.classList.contains(color)){
+    tilesArray[indexPiece + distanceBetweenRight].classList.add('ondragstart')
+  }
+  
   movementArray.forEach(tile => {
     if(!tile.hasChildNodes()){
       tile.classList.add('ondragstart')
     }
   })
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function towerVerticalMove(event){
+  for(let i = 0; i < tilesArray.length; i++){
+
+  }
 }
