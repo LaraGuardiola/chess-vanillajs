@@ -6,7 +6,6 @@ let firstMove, normalMove //pawn
 let tiles = document.querySelectorAll('.box')
 let tilesArray = [].slice.call(document.querySelectorAll('.box')) //as an array you can get access to indexOf method
 let rows = createRows(tilesArray,8)
-let column = []
 let pieces = document.querySelectorAll('.piece')
 let blackSection = document.querySelector('#blackSection')
 let whiteSection = document.querySelector('#whiteSection')
@@ -230,8 +229,8 @@ function checkRowCollision(rowIndex,index){
 }
 
 //checks if inside the tiles of a column there's a piece
-function checkColumnCollision(index){
-  return column[index].hasChildNodes() ? true : false
+function checkColumnCollision(arrayColumn,index){
+  return arrayColumn[index].hasChildNodes() ? true : false
 }
 
 function createRows(arr, numGroups) {
@@ -245,6 +244,7 @@ function getColumn(event){
   let indexPiece = tilesArray.indexOf(event.target.parentNode)
   let rowPos = Math.floor(indexPiece / 8)
   let indexRow = rows[rowPos].indexOf(event.target.parentNode)
+  let column = []
 
   if(column.length === 8){ //without this, every time you drag the piece it keeps pushing
     return
@@ -252,6 +252,7 @@ function getColumn(event){
     for(let i = 0; i < rows.length; i++){
       column.push(rows[i][indexRow])
     }
+    return column
   }
 }
 
@@ -311,7 +312,7 @@ function towerHorizontalMove(event){
 }
 
 function towerVerticalMove(event){
-  getColumn(event)
+  let column = getColumn(event)
   let nonEmptySpaces = []
   let indexColumn = column.indexOf(event.target.parentNode)
 
@@ -338,10 +339,10 @@ function towerVerticalMove(event){
   if(isNaN(distanceBetweenRight)){ //like before, if index is out of bound is going to return an error
     distanceBetweenRight = 0
   }
-  if(checkColumnCollision(indexColumn - distanceBetweenLeft) && !column[indexColumn - distanceBetweenLeft].firstChild.classList.contains(color)){
+  if(checkColumnCollision(column, indexColumn - distanceBetweenLeft) && !column[indexColumn - distanceBetweenLeft].firstChild.classList.contains(color)){
     column[indexColumn - distanceBetweenLeft].classList.add('ondragstart')
   }
-  if(checkColumnCollision(indexColumn + distanceBetweenRight) && !column[indexColumn + distanceBetweenRight].firstChild.classList.contains(color)){
+  if(checkColumnCollision(column, indexColumn + distanceBetweenRight) && !column[indexColumn + distanceBetweenRight].firstChild.classList.contains(color)){
     column[indexColumn + distanceBetweenRight].classList.add('ondragstart')
   }
 
@@ -355,10 +356,6 @@ function towerVerticalMove(event){
 function knightMovement(event){
   
 }
-
-
-
-
 
 
 
