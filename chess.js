@@ -354,7 +354,24 @@ function towerVerticalMove(event){
 }
 
 function knightMovement(event){
-  
+  let knightMovements = [-17,-15,-10,-6,6,10,15,17]
+  let indexPiece = tilesArray.indexOf(event.target.parentNode)
+  let type = event.target.className
+
+  if(type === "piece white knight"){
+    color = "white"
+  }else{
+    color = "black"
+  }
+
+  knightMovements.forEach(move => {
+    tilesArray[indexPiece - move].classList.add('ondragstart')
+    tilesArray.forEach(tile => {
+      if(tile.hasChildNodes() && tile.firstChild.classList.contains(color)){
+        tile.classList.remove('ondragstart')
+      }
+    })  
+  })
 }
 
 
