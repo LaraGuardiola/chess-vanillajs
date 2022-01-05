@@ -364,6 +364,20 @@ function knightMovement(event){
     color = "black"
   }
 
+  //Necessary in order to avoid unwanted movements to the other extreme of the board
+  if(isKnightInFirstColumn(indexPiece)){
+    knightMovements = [-17,-10,6,15]
+  }
+  if(isKnightInSecondColumn(indexPiece)){
+    knightMovements = [-17,-15,-10,6,15,17]
+  }
+  if(isKnightInSeventhColumn(indexPiece)){
+    knightMovements = [-17,-15,-6,10,15,17]
+  }
+  if(isKnightInEighthColumn(indexPiece)){
+    knightMovements = [-15,-6,10,17]
+  }
+  
   knightMovements.forEach(move => {
     if(!isOutOfBounds(indexPiece - move)){
       tilesArray[indexPiece - move].classList.add('ondragstart')
@@ -376,21 +390,65 @@ function knightMovement(event){
   })
 }
 
+function isKnightInSecondColumn(position){
+  switch(position){
+    case 1:
+    case 9:
+    case 17:
+    case 25:
+    case 33:
+    case 41:
+    case 49:
+    case 57:
+      return true
+  }
+}
+
+function isKnightInFirstColumn(position){
+  switch(position){
+    case 0:
+    case 8:
+    case 16:
+    case 24:
+    case 32:
+    case 40:
+    case 48:
+    case 56:
+      return true
+  }
+}
+
+function isKnightInSeventhColumn(position){
+  switch(position){
+    case 6:
+    case 14:
+    case 22:
+    case 30:
+    case 38:
+    case 46:
+    case 54:
+    case 62:
+      return true
+  }
+}
+
+function isKnightInEighthColumn(position){
+  switch(position){
+    case 7:
+    case 15:
+    case 23:
+    case 31:
+    case 39:
+    case 47:
+    case 55:
+    case 63:
+      return true
+  }
+}
+
 function isOutOfBounds(movement){
   return movement > 63 || movement < 0 ? true : false
 }
-
-console.log(isOutOfBounds(0))
-
-
-console.log(57 - +17)
-console.log(57 - +15)
-console.log(57 - +10)
-console.log(57 - +6)
-console.log(57 - -6)
-console.log(57 - -10)
-console.log(57 - -15)
-console.log(57 - -17)
 
 
 
