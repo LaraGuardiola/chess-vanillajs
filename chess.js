@@ -365,7 +365,9 @@ function knightMovement(event){
   }
 
   knightMovements.forEach(move => {
-    tilesArray[indexPiece - move].classList.add('ondragstart')
+    if(!isOutOfBounds(indexPiece - move)){
+      tilesArray[indexPiece - move].classList.add('ondragstart')
+    }
     tilesArray.forEach(tile => {
       if(tile.hasChildNodes() && tile.firstChild.classList.contains(color)){
         tile.classList.remove('ondragstart')
@@ -373,6 +375,22 @@ function knightMovement(event){
     })  
   })
 }
+
+function isOutOfBounds(movement){
+  return movement > 63 || movement < 0 ? true : false
+}
+
+console.log(isOutOfBounds(0))
+
+
+console.log(57 - +17)
+console.log(57 - +15)
+console.log(57 - +10)
+console.log(57 - +6)
+console.log(57 - -6)
+console.log(57 - -10)
+console.log(57 - -15)
+console.log(57 - -17)
 
 
 
