@@ -121,6 +121,9 @@ function checkPiece(event){ //can be refactored with a switch statement
   if(isKnight(event)){
     knight(event)
   }
+  if(isBishop(event)){
+    bishop(event)
+  }
 }
 
 function isPawn(event){
@@ -135,6 +138,10 @@ function isKnight(event){
   return event.target.classList.contains('knight') ? true : false
 }
 
+function isBishop(event){
+  return event.target.classList.contains('bishop') ? true : false
+}
+
 function pawn(event){                       
   pawnMovement(event)
 }
@@ -145,6 +152,10 @@ function tower(event){
 
 function knight(event){
   knightMovement(event)
+}
+
+function bishop(event){
+  bishopMovement(event)
 }
 
 function pawnMovement(event){
@@ -390,6 +401,7 @@ function knightMovement(event){
   })
 }
 
+//switch statements are slightly more efficient than ifs statements (0,008 ms vs 0,005)
 function isKnightInSecondColumn(position){
   switch(position){
     case 1:
@@ -450,6 +462,16 @@ function isOutOfBounds(movement){
   return movement > 63 || movement < 0 ? true : false
 }
 
+function bishopMovement(event){
+  let indexPiece = tilesArray.indexOf(event.target.parentNode)
+  let type = event.target.className
+
+  if(type === "piece white bishop"){
+    color = "white"
+  }else{
+    color = "black"
+  }
+}
 
 
 
