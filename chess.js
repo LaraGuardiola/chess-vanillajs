@@ -465,16 +465,53 @@ function isOutOfBounds(movement){
 function bishopMovement(event){
   let indexPiece = tilesArray.indexOf(event.target.parentNode)
   let type = event.target.className
+  let rowPos = Math.floor(indexPiece / 8)
+  let indexRow = rows[rowPos].indexOf(event.target.parentNode)
+  let limit = 7 - indexRow
+  let startPointTopRight = indexPiece - (limit * 7)
+  let frontCounter = []
+  let behindCounter = []
 
   if(type === "piece white bishop"){
     color = "white"
   }else{
     color = "black"
   }
+
+  if((limit * 7) > indexPiece){
+    limit = rowPos
+    startPointTopRight = indexPiece - (7 * limit)
+  }
+
+  for(let i = startPointTopRight; i < 63; i+=7){
+    tilesArray[i].classList.add('ondragstart')
+    if(isInFront(tilesArray[i], indexPiece) && tilesArray[i].hasChildNodes()){
+      frontCounter.push(tilesArray[i])
+    }
+    if(!isInFront(tilesArray[i], indexPiece) && tilesArray[i].hasChildNodes()){
+      behindCounter.push(tilesArray[i])
+    }
+  }
+
+  let indexTopFirstEncounter = tilesArray.indexOf(frontCounter[frontCounter.length - 1])
+  let indexBottomFirstEncounter = tilesArray.indexOf(behindCounter[1])
+  
+  console.log(frontCounter, behindCounter)
+
+  tilesArray.forEach(tile => {
+    if(tile.hasChildNodes() && tile.firstChild.classList.contains(color) || tilesArray.indexOf(tile) < indexTopFirstEncounter || tilesArray.indexOf(tile) > indexBottomFirstEncounter){
+      //tile.classList.remove('ondragstart')
+    }
+  })   
 }
 
-
-
+function isInFront(tile,index){
+  if(tilesArray.indexOf(tile) < index){
+    return true
+  }else{
+    return false
+  }
+}
 
 
 
