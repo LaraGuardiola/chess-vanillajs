@@ -494,8 +494,9 @@ function bishopMovement(event){
   function cleanIncorrectTiles(){
     let indexTopFirstEncounter = tilesArray.indexOf(frontCounter[frontCounter.length - 1])
     let indexBottomFirstEncounter = tilesArray.indexOf(behindCounter[1])
+    console.log(indexBottomFirstEncounter,inde)
     tilesArray.forEach(tile => {
-      if(tile.hasChildNodes() && tile.firstChild.classList.contains(color) || tilesArray.indexOf(tile) < indexTopFirstEncounter || tilesArray.indexOf(tile) > indexBottomFirstEncounter && indexBottomFirstEncounter != -1){
+      if(tile.hasChildNodes() && tile.firstChild.classList.contains(color) || tilesArray.indexOf(tile) < indexTopFirstEncounter  && indexTopFirstEncounter != -1 || tilesArray.indexOf(tile) > indexBottomFirstEncounter && indexBottomFirstEncounter != -1){
         tile.classList.remove('ondragstart')
       }
     }) 
@@ -548,7 +549,7 @@ function bishopMovement(event){
           break
       }
     }else{
-      for(let i = startPoint; i < 63; i+=7){
+      for(let i = startPoint; i < 64; i+=7){
         tilesArray[i].classList.add('ondragstart')
         if(isInFront(tilesArray[i], indexPiece) && tilesArray[i].hasChildNodes()){
           frontCounter.push(tilesArray[i])
@@ -563,23 +564,66 @@ function bishopMovement(event){
 
   function topLeftBottomRightMovement(){
     startPoint = indexPiece - (9 * indexRow)
-    
-    for(let i = startPoint; i < 63; i+=9){
-      tilesArray[i].classList.add('ondragstart')
-      if(isInFront(tilesArray[i], indexPiece) && tilesArray[i].hasChildNodes()){
-        frontCounter.push(tilesArray[i])
-      }
-      if(!isInFront(tilesArray[i], indexPiece) && tilesArray[i].hasChildNodes()){
-        behindCounter.push(tilesArray[i])
-      }
+
+    if((9 * indexRow) > indexPiece){
+      indexRow = rowPos
+      startPoint = indexPiece - (9 * indexRow)
     }
-    cleanIncorrectTiles()
-  }
-
-
-  //topRightBottomLeftMovement()
-  topLeftBottomRightMovement()
     
+
+    if(firstHalfStartMovements.includes(startPoint)){
+      switch(startPoint){
+        case 1:
+          firstHalfStartMovements = [tilesArray[1],tilesArray[10],tilesArray[19],tilesArray[28],tilesArray[37],tilesArray[46],tilesArray[55]]
+          checkEnemiesOnTheWay() 
+          cleanIncorrectTiles()
+          break
+        case 2:
+          firstHalfStartMovements = [tilesArray[2],tilesArray[11],tilesArray[20],tilesArray[29],tilesArray[38],tilesArray[47]]
+          checkEnemiesOnTheWay()
+          cleanIncorrectTiles()
+          break
+        case 3:
+          firstHalfStartMovements = [tilesArray[3],tilesArray[12],tilesArray[21],tilesArray[30],tilesArray[39]]
+          checkEnemiesOnTheWay()
+          cleanIncorrectTiles()
+          break
+        case 4:
+          firstHalfStartMovements = [tilesArray[4],tilesArray[13],tilesArray[22],tilesArray[31]]
+          checkEnemiesOnTheWay()
+          cleanIncorrectTiles()
+          break
+        case 5:
+          firstHalfStartMovements = [tilesArray[5],tilesArray[14],tilesArray[23]]
+          checkEnemiesOnTheWay()
+          cleanIncorrectTiles()
+          break
+        case 6:
+          firstHalfStartMovements = [tilesArray[6],tilesArray[15]]
+          checkEnemiesOnTheWay()
+          cleanIncorrectTiles()
+          break
+        case 7:
+          firstHalfStartMovements = [tilesArray[7]]
+          checkEnemiesOnTheWay()
+          cleanIncorrectTiles()
+          break
+      }  
+    }else{
+      for(let i = startPoint; i < 64; i+=9){
+        tilesArray[i].classList.add('ondragstart')
+        if(isInFront(tilesArray[i], indexPiece) && tilesArray[i].hasChildNodes()){
+          frontCounter.push(tilesArray[i])
+        }
+        if(!isInFront(tilesArray[i], indexPiece) && tilesArray[i].hasChildNodes()){
+          behindCounter.push(tilesArray[i])
+        }
+      }
+      cleanIncorrectTiles()
+    }
+  }
+  topRightBottomLeftMovement()
+  topLeftBottomRightMovement() 
 }
 
 function isInFront(tile,index){
