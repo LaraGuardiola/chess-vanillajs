@@ -497,7 +497,7 @@ function bishopMovement(event){
     console.log(indexBottomFirstEncounter,inde)
     tilesArray.forEach(tile => {
       if(tile.hasChildNodes() && tile.firstChild.classList.contains(color) || tilesArray.indexOf(tile) < indexTopFirstEncounter  && indexTopFirstEncounter != -1 || tilesArray.indexOf(tile) > indexBottomFirstEncounter && indexBottomFirstEncounter != -1){
-        tile.classList.remove('ondragstart')
+        //tile.classList.remove('ondragstart')
       }
     }) 
   }
