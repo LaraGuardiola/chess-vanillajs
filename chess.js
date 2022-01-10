@@ -2,8 +2,16 @@ let dragged
 let lastMovedStartPos
 let lastMovedEndPos
 let color
-let firstMove, normalMove //pawn
+let firstMove, normalMove //pawnzS
+
+//? querySelector: 0.13ms vs getElementsByClassName: 0.08ms
+console.time('getElementsByClassName')
+let tiles2 = document.getElementsByClassName('box')
+console.timeEnd('getElementsByClassName')
+console.time('querySelector')
 let tiles = document.querySelectorAll('.box')
+console.timeEnd('querySelector')
+
 let tilesArray = [].slice.call(document.querySelectorAll('.box')) //as an array you can get access to indexOf method
 let rows = createRows(tilesArray,8)
 let pieces = document.querySelectorAll('.piece')
@@ -15,7 +23,19 @@ let piecesCounter = { //useful to check if pawns have moved or not
     piecesCounter.tiles[index]++
   }
 }
+
+//? arrow: 0.011ms vs function: 0.007ms
+console.time('function en variable')
 let setEvent = (...args) => tiles.forEach(tile => tile.addEventListener(...args));
+console.timeEnd('function en variable')
+
+/*console.time('function')
+function setEvent(...args){
+  tiles.forEach(function(tile){
+    tile.addEventListener(...args)
+  })
+}
+console.timeEnd('function')*/
 
 //*EVENTS
 
@@ -101,12 +121,25 @@ function updateTurnSections(){
   }
 }
 
+//? forEach: 0.059ms vs for: 0.054ms
 function removeTileBackgrounds(){
+  console.time('for loop:')
+  for(let i = 0; i < tilesArray.length; i++){
+    if(tilesArray[i].classList.contains('ondragstart')){
+      tilesArray[i].classList.remove('ondragstart')
+    }
+  }
+  console.timeEnd('for loop:')
+}
+
+function removeTileBackgrounds(){
+  console.time('forEach loop:')
   tilesArray.forEach(tile =>{
     if(tile.classList.contains("ondragstart")){
       tile.classList.remove("ondragstart")
     }
   })
+  console.timeEnd('forEach loop:')
 }
 
 //* GAMEPLAY FUNCTIONS */
@@ -225,14 +258,29 @@ function pawnNormalTurn(indexPiece){ //NORMAL TURN
 }
 
 //checks if pawn has already moved
+
+//? ternario: 0.008ms if else: 0.007ms
+console.time('ternario_primer_turno')
 function isPawnFirstTurn(index){
   return piecesCounter.tiles[index] === 0 ? true : false
 }
+console.timeEnd('ternario_primer_turno')
+
+console.time('if_else_primer_turno')
+function isPawnFirstTurn(index){
+  if(piecesCounter.tiles[index] === 0){
+    return true
+  }else{
+    return false
+  }
+}
+console.timeEnd('if_else_primer_turno')
 
 //checks if tile has a piece inside
 function checkCollision(index){
   return tilesArray[index].hasChildNodes() ? true : false
 }
+
 
 //checks if inside the tiles of a row there's a piece
 function checkRowCollision(rowIndex,index){
@@ -401,7 +449,8 @@ function knightMovement(event){
   })
 }
 
-//switch statements are slightly more efficient than ifs statements (0,008 ms vs 0,005)
+//? switch: 0.004ms VS if or: 0.0035ms VS if: 0.003ms (aprox)
+console.time('switch')
 function isKnightInSecondColumn(position){
   switch(position){
     case 1:
@@ -415,6 +464,36 @@ function isKnightInSecondColumn(position){
       return true
   }
 }
+console.timeEnd('switch')
+
+console.time('if or')
+function isKnightInFirstColumn(position){
+  if(position === 1 || position === 9 || position === 17 || position === 25 || position === 33 || position === 41 || position === 49 || position === 57){
+    return true
+  }
+}
+console.timeEnd('if or')
+
+console.time('if')
+function isKnightInFirstColumn(position){
+  if(position === 1)
+  return true
+  if(position === 9)
+  return true
+  if(position === 17)
+  return true
+  if(position === 25)
+  return true
+  if(position === 33)
+  return true
+  if(position === 41)
+  return true
+  if(position === 49)
+  return true
+  if(position === 57)
+  return true
+}
+console.timeEnd('if')
 
 function isKnightInFirstColumn(position){
   switch(position){
@@ -471,7 +550,7 @@ function bishopMovement(event){
   let startPoint
   let frontCounter = []
   let behindCounter = []
-  let firstHalfStartMovements = [0,1,2,3,4,5,6]
+  let firstHalfStartMovements = [0,1,2,3,4,5,6,7]
 
   if(type === "piece white bishop"){
     color = "white"
@@ -494,7 +573,7 @@ function bishopMovement(event){
   function cleanIncorrectTiles(){
     let indexTopFirstEncounter = tilesArray.indexOf(frontCounter[frontCounter.length - 1])
     let indexBottomFirstEncounter = tilesArray.indexOf(behindCounter[1])
-    console.log(indexBottomFirstEncounter,inde)
+    
     tilesArray.forEach(tile => {
       if(tile.hasChildNodes() && tile.firstChild.classList.contains(color) || tilesArray.indexOf(tile) < indexTopFirstEncounter  && indexTopFirstEncounter != -1 || tilesArray.indexOf(tile) > indexBottomFirstEncounter && indexBottomFirstEncounter != -1){
         tile.classList.remove('ondragstart')
