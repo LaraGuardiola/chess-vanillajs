@@ -9,6 +9,47 @@ let rows = createRows(tilesArray,8)
 let pieces = document.querySelectorAll('.piece')
 let blackSection = document.querySelector('#blackSection')
 let whiteSection = document.querySelector('#whiteSection')
+
+//*THE SKYSCRAPPERS
+
+let diagonals = [
+   [tilesArray[0]],
+   [tilesArray[1],tilesArray[8]],
+   [tilesArray[2],tilesArray[9],tilesArray[16]],
+   [tilesArray[3],tilesArray[10],tilesArray[17],tilesArray[24]],
+   [tilesArray[4],tilesArray[11],tilesArray[18],tilesArray[25],tilesArray[32]],
+   [tilesArray[5],tilesArray[12],tilesArray[19],tilesArray[26],tilesArray[33],tilesArray[40]],
+   [tilesArray[6],tilesArray[13],tilesArray[20],tilesArray[27],tilesArray[34],tilesArray[41],tilesArray[48]],
+   [tilesArray[7],tilesArray[14],tilesArray[21],tilesArray[28],tilesArray[35],tilesArray[42],tilesArray[49],tilesArray[56]],
+   [tilesArray[15],tilesArray[22],tilesArray[29],tilesArray[36],tilesArray[43],tilesArray[50],tilesArray[57]],
+   [tilesArray[23],tilesArray[30],tilesArray[37],tilesArray[44],tilesArray[51],tilesArray[58]],
+   [tilesArray[31],tilesArray[38],tilesArray[45],tilesArray[52],tilesArray[59]],
+   [tilesArray[39],tilesArray[46],tilesArray[53],tilesArray[60]],
+   [tilesArray[47],tilesArray[54],tilesArray[61]],
+   [tilesArray[55],tilesArray[62]],
+   [tilesArray[63]]
+]
+
+let diagonals2 = [
+  [tilesArray[56]],
+  [tilesArray[48],tilesArray[62]],
+  [tilesArray[47],tilesArray[54],tilesArray[61]],
+  [tilesArray[39],tilesArray[46],tilesArray[53],tilesArray[60]],
+  [tilesArray[31],tilesArray[38],tilesArray[45],tilesArray[52],tilesArray[59]],
+  [tilesArray[23],tilesArray[30],tilesArray[37],tilesArray[44],tilesArray[51],tilesArray[58]],
+  [tilesArray[15],tilesArray[22],tilesArray[29],tilesArray[36],tilesArray[43],tilesArray[50],tilesArray[57]],
+  [tilesArray[7],tilesArray[14],tilesArray[21],tilesArray[28],tilesArray[35],tilesArray[42],tilesArray[49],tilesArray[56]],
+  [tilesArray[15],tilesArray[22],tilesArray[29],tilesArray[36],tilesArray[43],tilesArray[50],tilesArray[57]],
+  [tilesArray[23],tilesArray[30],tilesArray[37],tilesArray[44],tilesArray[51],tilesArray[58]],
+  [tilesArray[31],tilesArray[38],tilesArray[45],tilesArray[52],tilesArray[59]],
+  [tilesArray[39],tilesArray[46],tilesArray[53],tilesArray[60]],
+  [tilesArray[47],tilesArray[54],tilesArray[61]],
+  [tilesArray[55],tilesArray[62]],
+  [tilesArray[63]]
+]
+
+console.log(diagonals)
+
 let piecesCounter = { //useful to check if pawns have moved or not
   tiles : tilesArray.map(() => 0),
   addPieceTurn : index => {
@@ -472,6 +513,7 @@ function bishopMovement(event){
   let frontCounter = []
   let behindCounter = []
   let firstHalfStartMovements = [0,1,2,3,4,5,6]
+  
 
   if(type === "piece white bishop"){
     color = "white"
@@ -489,14 +531,14 @@ function bishopMovement(event){
         behindCounter.push(tile)
       }
     })
+    console.log(frontCounter,behindCounter)
   }
 
   function cleanIncorrectTiles(){
     let indexTopFirstEncounter = tilesArray.indexOf(frontCounter[frontCounter.length - 1])
     let indexBottomFirstEncounter = tilesArray.indexOf(behindCounter[1])
-    console.log(indexBottomFirstEncounter,inde)
     tilesArray.forEach(tile => {
-      if(tile.hasChildNodes() && tile.firstChild.classList.contains(color) || tilesArray.indexOf(tile) < indexTopFirstEncounter  && indexTopFirstEncounter != -1 || tilesArray.indexOf(tile) > indexBottomFirstEncounter && indexBottomFirstEncounter != -1){
+      if(tile.hasChildNodes() && tile.firstChild.classList.contains(color)){
         tile.classList.remove('ondragstart')
       }
     }) 
@@ -614,9 +656,11 @@ function bishopMovement(event){
         tilesArray[i].classList.add('ondragstart')
         if(isInFront(tilesArray[i], indexPiece) && tilesArray[i].hasChildNodes()){
           frontCounter.push(tilesArray[i])
+          console.log(frontCounter)
         }
         if(!isInFront(tilesArray[i], indexPiece) && tilesArray[i].hasChildNodes()){
           behindCounter.push(tilesArray[i])
+          console.log(behindCounter)
         }
       }
       cleanIncorrectTiles()
