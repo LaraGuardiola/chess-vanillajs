@@ -672,8 +672,8 @@ function bishopMovement(event){
 
 function isInFront(tile,index){
   if(tilesArray.indexOf(tile) < index){
-    return true
+    return
   }else{
-    return false
+    return
   }
 }
