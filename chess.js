@@ -301,8 +301,8 @@ function getColumn(event){
   if(column.length === 8){ //without this, every time you drag the piece it keeps pushing
     return
   }else{
-    for(let i = 0; i < rows.length; i++){
-      column.push(rows[i][indexRow])
+    for(let row of rows){
+      column.push(row[indexRow])
     }
     return column
   }
