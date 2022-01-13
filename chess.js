@@ -9,47 +9,6 @@ let rows = createRows(tilesArray,8)
 let pieces = document.querySelectorAll('.piece')
 let blackSection = document.querySelector('#blackSection')
 let whiteSection = document.querySelector('#whiteSection')
-
-//*THE SKYSCRAPPERS
-
-let diagonals = [
-   [tilesArray[0]],
-   [tilesArray[1],tilesArray[8]],
-   [tilesArray[2],tilesArray[9],tilesArray[16]],
-   [tilesArray[3],tilesArray[10],tilesArray[17],tilesArray[24]],
-   [tilesArray[4],tilesArray[11],tilesArray[18],tilesArray[25],tilesArray[32]],
-   [tilesArray[5],tilesArray[12],tilesArray[19],tilesArray[26],tilesArray[33],tilesArray[40]],
-   [tilesArray[6],tilesArray[13],tilesArray[20],tilesArray[27],tilesArray[34],tilesArray[41],tilesArray[48]],
-   [tilesArray[7],tilesArray[14],tilesArray[21],tilesArray[28],tilesArray[35],tilesArray[42],tilesArray[49],tilesArray[56]],
-   [tilesArray[15],tilesArray[22],tilesArray[29],tilesArray[36],tilesArray[43],tilesArray[50],tilesArray[57]],
-   [tilesArray[23],tilesArray[30],tilesArray[37],tilesArray[44],tilesArray[51],tilesArray[58]],
-   [tilesArray[31],tilesArray[38],tilesArray[45],tilesArray[52],tilesArray[59]],
-   [tilesArray[39],tilesArray[46],tilesArray[53],tilesArray[60]],
-   [tilesArray[47],tilesArray[54],tilesArray[61]],
-   [tilesArray[55],tilesArray[62]],
-   [tilesArray[63]]
-]
-
-let diagonals2 = [
-  [tilesArray[56]],
-  [tilesArray[48],tilesArray[62]],
-  [tilesArray[47],tilesArray[54],tilesArray[61]],
-  [tilesArray[39],tilesArray[46],tilesArray[53],tilesArray[60]],
-  [tilesArray[31],tilesArray[38],tilesArray[45],tilesArray[52],tilesArray[59]],
-  [tilesArray[23],tilesArray[30],tilesArray[37],tilesArray[44],tilesArray[51],tilesArray[58]],
-  [tilesArray[15],tilesArray[22],tilesArray[29],tilesArray[36],tilesArray[43],tilesArray[50],tilesArray[57]],
-  [tilesArray[7],tilesArray[14],tilesArray[21],tilesArray[28],tilesArray[35],tilesArray[42],tilesArray[49],tilesArray[56]],
-  [tilesArray[15],tilesArray[22],tilesArray[29],tilesArray[36],tilesArray[43],tilesArray[50],tilesArray[57]],
-  [tilesArray[23],tilesArray[30],tilesArray[37],tilesArray[44],tilesArray[51],tilesArray[58]],
-  [tilesArray[31],tilesArray[38],tilesArray[45],tilesArray[52],tilesArray[59]],
-  [tilesArray[39],tilesArray[46],tilesArray[53],tilesArray[60]],
-  [tilesArray[47],tilesArray[54],tilesArray[61]],
-  [tilesArray[55],tilesArray[62]],
-  [tilesArray[63]]
-]
-
-console.log(diagonals)
-
 let piecesCounter = { //useful to check if pawns have moved or not
   tiles : tilesArray.map(() => 0),
   addPieceTurn : index => {
@@ -319,6 +278,14 @@ function towerMovement(event){
   towerVerticalMove(event)
 }
 
+function printMovementTiles(movementArray){
+  movementArray.forEach(tile => {
+    if(!tile.hasChildNodes()){
+      tile.classList.add('ondragstart')
+    }
+  })
+}
+
 function towerHorizontalMove(event){
   let indexPiece = tilesArray.indexOf(event.target.parentNode)
   let rowPos = Math.floor(indexPiece / 8)
@@ -355,12 +322,7 @@ function towerHorizontalMove(event){
   if(checkRowCollision(rowPos, indexRow + distanceBetweenRight) && !tilesArray[indexPiece + distanceBetweenRight].firstChild.classList.contains(color)){
     tilesArray[indexPiece + distanceBetweenRight].classList.add('ondragstart')
   }
-  
-  movementArray.forEach(tile => {
-    if(!tile.hasChildNodes()){
-      tile.classList.add('ondragstart')
-    }
-  })
+  printMovementTiles(movementArray)
 }
 
 function towerVerticalMove(event){
@@ -397,12 +359,7 @@ function towerVerticalMove(event){
   if(checkColumnCollision(column, indexColumn + distanceBetweenRight) && !column[indexColumn + distanceBetweenRight].firstChild.classList.contains(color)){
     column[indexColumn + distanceBetweenRight].classList.add('ondragstart')
   }
-
-  movementArray.forEach(tile => {
-    if(!tile.hasChildNodes()){
-      tile.classList.add('ondragstart')
-    }
-  })
+  printMovementTiles(movementArray)
 }
 
 function knightMovement(event){
@@ -501,179 +458,4 @@ function isKnightInEighthColumn(position){
 
 function isOutOfBounds(movement){
   return movement > 63 || movement < 0 ? true : false
-}
-
-function bishopMovement(event){
-  let indexPiece = tilesArray.indexOf(event.target.parentNode)
-  let type = event.target.className
-  let rowPos = Math.floor(indexPiece / 8)
-  let indexRow = rows[rowPos].indexOf(event.target.parentNode)
-  let limit = 7 - indexRow
-  let startPoint
-  let frontCounter = []
-  let behindCounter = []
-  let firstHalfStartMovements = [0,1,2,3,4,5,6]
-  
-
-  if(type === "piece white bishop"){
-    color = "white"
-  }else{
-    color = "black"
-  }
-
-  function checkEnemiesOnTheWay(){
-    firstHalfStartMovements.forEach(tile =>{
-      tile.classList.add('ondragstart')
-      if(isInFront(tile, indexPiece) && tile.hasChildNodes()){
-        frontCounter.push(tile)
-      }
-      if(!isInFront(tile, indexPiece) && tile.hasChildNodes()){
-        behindCounter.push(tile)
-      }
-    })
-    console.log(frontCounter,behindCounter)
-  }
-
-  function cleanIncorrectTiles(){
-    let indexTopFirstEncounter = tilesArray.indexOf(frontCounter[frontCounter.length - 1])
-    let indexBottomFirstEncounter = tilesArray.indexOf(behindCounter[1])
-    tilesArray.forEach(tile => {
-      if(tile.hasChildNodes() && tile.firstChild.classList.contains(color)){
-        tile.classList.remove('ondragstart')
-      }
-    }) 
-  }
-
-  function topRightBottomLeftMovement(){
-    startPoint = indexPiece - (limit * 7)
-
-    if((limit * 7) > indexPiece){
-      limit = rowPos
-      startPoint = indexPiece - (7 * limit)
-    }
-
-    if(firstHalfStartMovements.includes(startPoint)){
-      switch(startPoint){
-        case 6:
-          firstHalfStartMovements = [tilesArray[6],tilesArray[13],tilesArray[20],tilesArray[27],tilesArray[34],tilesArray[41],tilesArray[48]]
-          checkEnemiesOnTheWay() 
-          cleanIncorrectTiles()
-          break
-        case 5:
-          firstHalfStartMovements = [tilesArray[5],tilesArray[12],tilesArray[19],tilesArray[26],tilesArray[33],tilesArray[40]]
-          checkEnemiesOnTheWay()
-          cleanIncorrectTiles()
-          break
-        case 4:
-          firstHalfStartMovements = [tilesArray[4],tilesArray[11],tilesArray[18],tilesArray[25],tilesArray[32]]
-          checkEnemiesOnTheWay()
-          cleanIncorrectTiles()
-          break
-        case 3:
-          firstHalfStartMovements = [tilesArray[3],tilesArray[10],tilesArray[17],tilesArray[24]]
-          checkEnemiesOnTheWay()
-          cleanIncorrectTiles()
-          break
-        case 2:
-          firstHalfStartMovements = [tilesArray[2],tilesArray[9],tilesArray[16]]
-          checkEnemiesOnTheWay()
-          cleanIncorrectTiles()
-          break
-        case 1:
-          firstHalfStartMovements = [tilesArray[1],tilesArray[8]]
-          checkEnemiesOnTheWay()
-          cleanIncorrectTiles()
-          break
-        case 0:
-          firstHalfStartMovements = [tilesArray[0]]
-          checkEnemiesOnTheWay()
-          cleanIncorrectTiles()
-          break
-      }
-    }else{
-      for(let i = startPoint; i < 64; i+=7){
-        tilesArray[i].classList.add('ondragstart')
-        if(isInFront(tilesArray[i], indexPiece) && tilesArray[i].hasChildNodes()){
-          frontCounter.push(tilesArray[i])
-        }
-        if(!isInFront(tilesArray[i], indexPiece) && tilesArray[i].hasChildNodes()){
-          behindCounter.push(tilesArray[i])
-        }
-      }
-      cleanIncorrectTiles()
-    }
-  }
-
-  function topLeftBottomRightMovement(){
-    startPoint = indexPiece - (9 * indexRow)
-
-    if((9 * indexRow) > indexPiece){
-      indexRow = rowPos
-      startPoint = indexPiece - (9 * indexRow)
-    }
-    
-
-    if(firstHalfStartMovements.includes(startPoint)){
-      switch(startPoint){
-        case 1:
-          firstHalfStartMovements = [tilesArray[1],tilesArray[10],tilesArray[19],tilesArray[28],tilesArray[37],tilesArray[46],tilesArray[55]]
-          checkEnemiesOnTheWay() 
-          cleanIncorrectTiles()
-          break
-        case 2:
-          firstHalfStartMovements = [tilesArray[2],tilesArray[11],tilesArray[20],tilesArray[29],tilesArray[38],tilesArray[47]]
-          checkEnemiesOnTheWay()
-          cleanIncorrectTiles()
-          break
-        case 3:
-          firstHalfStartMovements = [tilesArray[3],tilesArray[12],tilesArray[21],tilesArray[30],tilesArray[39]]
-          checkEnemiesOnTheWay()
-          cleanIncorrectTiles()
-          break
-        case 4:
-          firstHalfStartMovements = [tilesArray[4],tilesArray[13],tilesArray[22],tilesArray[31]]
-          checkEnemiesOnTheWay()
-          cleanIncorrectTiles()
-          break
-        case 5:
-          firstHalfStartMovements = [tilesArray[5],tilesArray[14],tilesArray[23]]
-          checkEnemiesOnTheWay()
-          cleanIncorrectTiles()
-          break
-        case 6:
-          firstHalfStartMovements = [tilesArray[6],tilesArray[15]]
-          checkEnemiesOnTheWay()
-          cleanIncorrectTiles()
-          break
-        case 7:
-          firstHalfStartMovements = [tilesArray[7]]
-          checkEnemiesOnTheWay()
-          cleanIncorrectTiles()
-          break
-      }  
-    }else{
-      for(let i = startPoint; i < 64; i+=9){
-        tilesArray[i].classList.add('ondragstart')
-        if(isInFront(tilesArray[i], indexPiece) && tilesArray[i].hasChildNodes()){
-          frontCounter.push(tilesArray[i])
-          console.log(frontCounter)
-        }
-        if(!isInFront(tilesArray[i], indexPiece) && tilesArray[i].hasChildNodes()){
-          behindCounter.push(tilesArray[i])
-          console.log(behindCounter)
-        }
-      }
-      cleanIncorrectTiles()
-    }
-  }
-  topRightBottomLeftMovement()
-  topLeftBottomRightMovement() 
-}
-
-function isInFront(tile,index){
-  if(tilesArray.indexOf(tile) < index){
-    return
-  }else{
-    return
-  }
 }
