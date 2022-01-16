@@ -475,13 +475,18 @@ function bishopMovement(event){
     color = "black"
   }
 
+  //calculates starting row
   if(startingPoint < 0){
     startingPoint = 0
     indexRowStartPoint = indexRow - rowPos
   }
 
-  //copy needed, otherwise indexRowStart will start accumulated
-  let ogIndexRowStartingPoint = indexRowStartPoint
+  //calculates starting tilesArray index
+  let ogIndexRow = indexRow
+  if(indexRow > rowPos){
+    indexRow = rowPos
+  }
+  let startTopLeft = ((rowPos * 8) + ogIndexRow) - (9 * indexRow) 
 
   //creates the diagonal array in left to right order
   function topLeftBottomRight(){
@@ -493,7 +498,6 @@ function bishopMovement(event){
       indexRowStartPoint++
     }
   }
-
   topLeftBottomRight() 
 
   //within the diagonal array finds the nearest encounters
@@ -517,25 +521,35 @@ function bishopMovement(event){
       }
     }
 
-    console.log(firstAhead,firstBehind)
-
-    if(!isNaN(firstAhead) && !isNaN(firstBehind)){
+    //treating different cases
+    if(!isNaN(firstAhead) && !isNaN(firstBehind)){   //Has pieces in front and behind
+      console.log('A')
       for(let i = firstAhead; i < firstBehind + 1; i+=9){
         finalArray.push(tilesArray[i])
       }
     }
-    if(isNaN(firstAhead) && !isNaN(firstBehind)){
-      if(indexRow > rowPos){
-        indexRow = rowPos
-      }
-      let startTopLeft = ((rowPos * 8) + indexRow) - (9 * indexRow)
+    if(isNaN(firstAhead) && !isNaN(firstBehind)){   //Only has pieces behind
+      console.log('B')
       for(let x = startTopLeft; x < firstBehind + 1; x+=9){
         finalArray.push(tilesArray[x])
+      }
+    }
+    if(!isNaN(firstAhead) && isNaN(firstBehind)){   //Only has pieces in front
+      console.log('C')
+      for(let y = firstAhead; y < 64; y+=9){
+        finalArray.push(tilesArray[y])
+      }
+    }
+    if(isNaN(firstAhead) && isNaN(firstBehind)){    //Pieces neither behind or in 
+      console.log('D')
+      for(let z = startTopLeft; z < 64; z+=9){
+        finalArray.push(tilesArray[z])
       }
     }
     
     console.log(finalArray)
 
+    //paiting and removing unnecessary tiles
     finalArray.forEach(tile =>{
       tile.classList.add('ondragstart')
       if(tile.hasChildNodes() && tile.firstChild.classList.contains(color)){
