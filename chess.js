@@ -142,6 +142,9 @@ function isBishop(event){
   return event.target.classList.contains('bishop') ? true : false
 }
 
+//* MOVEMENTS */
+
+  //*PAWN
 function pawnMovement(event){
   let indexPiece = tilesArray.indexOf(event.target.parentNode)
   let type = event.target.className
