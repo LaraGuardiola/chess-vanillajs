@@ -459,3 +459,91 @@ function isKnightInEighthColumn(position){
 function isOutOfBounds(movement){
   return movement > 63 || movement < 0 ? true : false
 }
+
+function bishopMovement(event){
+  let indexPiece = tilesArray.indexOf(event.target.parentNode)
+  let rowPos = Math.floor(indexPiece / 8)
+  let indexRow = rows[rowPos].indexOf(event.target.parentNode)
+  let startingPoint = rowPos - indexRow
+  let type = event.target.className
+  let piecesLeftRight = []
+  let indexRowStartPoint = 0
+
+  if(type === "piece white bishop"){
+    color = "white"
+  }else{
+    color = "black"
+  }
+
+  if(startingPoint < 0){
+    startingPoint = 0
+    indexRowStartPoint = indexRow - rowPos
+  }
+
+  //copy needed, otherwise indexRowStart will start accumulated
+  let ogIndexRowStartingPoint = indexRowStartPoint
+
+  //creates the diagonal array in left to right order
+  function topLeftBottomRight(){
+    for(let i = startingPoint; i < 8; i++){
+      piecesLeftRight.push(rows[i][indexRowStartPoint])
+      if(indexRowStartPoint === 7){
+        return
+      }
+      indexRowStartPoint++
+    }
+  }
+
+  topLeftBottomRight() 
+
+  //within the diagonal array finds the nearest encounters
+  function findFirstEncounters(){
+    let aheadArray = []
+    let behindArray = []
+    let finalArray = []
+    let firstAhead, firstBehind
+
+    for(let piece of piecesLeftRight){
+      if(tilesArray.indexOf(piece) === indexPiece){
+        continue
+      }
+      if(piece.hasChildNodes() && indexPiece > tilesArray.indexOf(piece)){
+        aheadArray.push(tilesArray.indexOf(piece))
+        firstAhead = Math.max(...aheadArray)
+      }
+      if(piece.hasChildNodes() && indexPiece < tilesArray.indexOf(piece)){
+        behindArray.push(tilesArray.indexOf(piece))
+        firstBehind = Math.min(...behindArray)
+      }
+    }
+
+    console.log(firstAhead,firstBehind)
+
+    if(!isNaN(firstAhead) && !isNaN(firstBehind)){
+      for(let i = firstAhead; i < firstBehind + 1; i+=9){
+        finalArray.push(tilesArray[i])
+      }
+    }
+    if(isNaN(firstAhead) && !isNaN(firstBehind)){
+      if(indexRow > rowPos){
+        indexRow = rowPos
+      }
+      let startTopLeft = ((rowPos * 8) + indexRow) - (9 * indexRow)
+      for(let x = startTopLeft; x < firstBehind + 1; x+=9){
+        finalArray.push(tilesArray[x])
+      }
+    }
+    
+    console.log(finalArray)
+
+    finalArray.forEach(tile =>{
+      tile.classList.add('ondragstart')
+      if(tile.hasChildNodes() && tile.firstChild.classList.contains(color)){
+        tile.classList.remove('ondragstart')
+      }
+    }) 
+  }
+
+  findFirstEncounters()
+
+}
