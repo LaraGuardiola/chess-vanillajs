@@ -113,16 +113,16 @@ function removeTileBackgrounds(){
 
 function checkPiece(event){ //can be refactored with a switch statement
   if(isPawn(event)){
-    pawn(event)
+    pawnMovement(event)
   }
   if(isTower(event)){
-    tower(event)
+    towerMovement(event)
   }
   if(isKnight(event)){
-    knight(event)
+    knightMovement(event)
   }
   if(isBishop(event)){
-    bishop(event)
+    bishopMovement(event)
   }
 }
 
@@ -140,22 +140,6 @@ function isKnight(event){
 
 function isBishop(event){
   return event.target.classList.contains('bishop') ? true : false
-}
-
-function pawn(event){                       
-  pawnMovement(event)
-}
-
-function tower(event){
-  towerMovement(event)
-}
-
-function knight(event){
-  knightMovement(event)
-}
-
-function bishop(event){
-  bishopMovement(event)
 }
 
 function pawnMovement(event){
@@ -488,6 +472,10 @@ function bishopMovement(event){
   }
   let startTopLeft = ((rowPos * 8) + ogIndexRow) - (9 * indexRow) 
 
+  //calculates ending tilesArray index
+  let distanceToEndRow =  7 - ogIndexRow
+  let endTopLeft = indexPiece + (9 * distanceToEndRow)
+
   //creates the diagonal array in left to right order
   function topLeftBottomRight(){
     for(let i = startingPoint; i < 8; i++){
@@ -523,31 +511,25 @@ function bishopMovement(event){
 
     //treating different cases
     if(!isNaN(firstAhead) && !isNaN(firstBehind)){   //Has pieces in front and behind
-      console.log('A')
       for(let i = firstAhead; i < firstBehind + 1; i+=9){
         finalArray.push(tilesArray[i])
       }
     }
     if(isNaN(firstAhead) && !isNaN(firstBehind)){   //Only has pieces behind
-      console.log('B')
       for(let x = startTopLeft; x < firstBehind + 1; x+=9){
         finalArray.push(tilesArray[x])
       }
     }
     if(!isNaN(firstAhead) && isNaN(firstBehind)){   //Only has pieces in front
-      console.log('C')
-      for(let y = firstAhead; y < 64; y+=9){
+      for(let y = firstAhead; y < endTopLeft + 1; y+=9){
         finalArray.push(tilesArray[y])
       }
     }
     if(isNaN(firstAhead) && isNaN(firstBehind)){    //Pieces neither behind or in 
-      console.log('D')
-      for(let z = startTopLeft; z < 64; z+=9){
+      for(let z = startTopLeft; z < endTopLeft + 1; z+=9){
         finalArray.push(tilesArray[z])
       }
     }
-    
-    console.log(finalArray)
 
     //paiting and removing unnecessary tiles
     finalArray.forEach(tile =>{
@@ -557,7 +539,5 @@ function bishopMovement(event){
       }
     }) 
   }
-
   findFirstEncounters()
-
 }
