@@ -475,6 +475,10 @@ function bishopMovement(event){
   //calculates ending tilesArray index
   let distanceToEndRow =  7 - ogIndexRow
   let endTopLeft = indexPiece + (9 * distanceToEndRow)
+  if(endTopLeft > 63){
+    distanceToEndRow = 7 - rowPos
+    endTopLeft = indexPiece + (distanceToEndRow * 9)
+  }
 
   //creates the diagonal array in left to right order
   function topLeftBottomRight(){
