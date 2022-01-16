@@ -124,6 +124,9 @@ function checkPiece(event){ //can be refactored with a switch statement
   if(isBishop(event)){
     bishopMovement(event)
   }
+  if(isQueen(event)){
+    queenMovement(event)
+  }
 }
 
 function isPawn(event){
@@ -140,6 +143,10 @@ function isKnight(event){
 
 function isBishop(event){
   return event.target.classList.contains('bishop') ? true : false
+}
+
+function isQueen(event){
+  return event.target.classList.contains('queen') ? true : false
 }
 
 //* MOVEMENTS */
@@ -254,6 +261,7 @@ function getColumn(event){
   }
 }
 
+  //* ROOK */
 function towerMovement(event){
   let type = event.target.className
   if(type === "piece white tower"){
@@ -349,6 +357,7 @@ function towerVerticalMove(event){
   printMovementTiles(movementArray)
 }
 
+  //* KNIGHT */
 function knightMovement(event){
   let knightMovements = [-17,-15,-10,-6,6,10,15,17]
   let indexPiece = tilesArray.indexOf(event.target.parentNode)
@@ -447,6 +456,7 @@ function isOutOfBounds(movement){
   return movement > 63 || movement < 0 ? true : false
 }
 
+  //* BISHOP */
 function bishopMovement(event){
   let indexPiece = tilesArray.indexOf(event.target.parentNode)
   let rowPos = Math.floor(indexPiece / 8)
@@ -456,6 +466,11 @@ function bishopMovement(event){
   let piecesRightLeft = []
 
   if(type === "piece white bishop"){
+    color = "white"
+  }else{
+    color = "black"
+  }
+  if(type === "piece white queen"){
     color = "white"
   }else{
     color = "black"
@@ -605,26 +620,22 @@ function bishopMovement(event){
     }
 
     //treating different cases
-    if(!isNaN(firstAhead) && !isNaN(firstBehind)){   //Has pieces in front and behind OK
-      console.log('Has pieces in front and behind')
+    if(!isNaN(firstAhead) && !isNaN(firstBehind)){   //Has pieces in front and behind
       for(let i = firstAhead; i < firstBehind + 1; i+=7){
         finalArray.push(tilesArray[i])
       }
     }
-    if(isNaN(firstAhead) && !isNaN(firstBehind)){   //Only has pieces behind OK
-      console.log('Only has pieces behind')
+    if(isNaN(firstAhead) && !isNaN(firstBehind)){   //Only has pieces behind
       for(let x = startTopRight; x < firstBehind + 1; x+=7){
         finalArray.push(tilesArray[x])
       }
     }
     if(!isNaN(firstAhead) && isNaN(firstBehind)){   //Only has pieces in front
-      console.log('Only has pieces in front')
       for(let y = firstAhead; y < endTopRight + 1; y+=7){
         finalArray.push(tilesArray[y])
       }
     }
-    if(isNaN(firstAhead) && isNaN(firstBehind)){    //Pieces neither behind or in OK?
-      console.log('Pieces neither behind or in')
+    if(isNaN(firstAhead) && isNaN(firstBehind)){    //Pieces neither behind or in
       for(let z = startTopRight; z < endTopRight + 1; z+=7){
         finalArray.push(tilesArray[z])
       }
@@ -639,4 +650,16 @@ function bishopMovement(event){
     }) 
   }
   findFirstEncountersRightLeft()
+}
+
+function queenMovement(event){
+  let type = event.target.className
+  if(type === "piece white queen"){
+    color = "white"
+  }else{
+    color = "black"
+  }
+  towerHorizontalMove(event)
+  towerVerticalMove(event)
+  bishopMovement(event)
 }
