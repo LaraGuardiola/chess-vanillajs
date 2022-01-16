@@ -4,7 +4,7 @@ let lastMovedEndPos
 let color
 let firstMove, normalMove //pawn
 let tiles = document.querySelectorAll('.box')
-let tilesArray = [].slice.call(document.querySelectorAll('.box')) //as an array you can get access to indexOf method
+let tilesArray = [].slice.call(tiles) //as an array you can get access to indexOf method
 let rows = createRows(tilesArray,8)
 let pieces = document.querySelectorAll('.piece')
 let blackSection = document.querySelector('#blackSection')
@@ -254,11 +254,8 @@ function getColumn(event){
   //* ROOK */
 function towerMovement(event){
   let type = event.target.className
-  if(type === "piece white tower"){
-    color = "white"
-  }else{
-    color = "black"
-  }
+  if(type.includes('white')) color = 'white'
+  else color = 'black'
   towerHorizontalMove(event)
   towerVerticalMove(event)
 }
@@ -353,11 +350,8 @@ function knightMovement(event){
   let indexPiece = tilesArray.indexOf(event.target.parentNode)
   let type = event.target.className
 
-  if(type === "piece white knight"){
-    color = "white"
-  }else{
-    color = "black"
-  }
+  if(type.includes('white')) color = 'white'
+  else color = 'black'
 
   //Necessary in order to avoid unwanted movements to the other extreme of the board
   if(isKnightInFirstColumn(indexPiece)){
@@ -455,16 +449,8 @@ function bishopMovement(event){
   let piecesLeftRight = []
   let piecesRightLeft = []
 
-  if(type === "piece white bishop"){
-    color = "white"
-  }else{
-    color = "black"
-  }
-  if(type === "piece white queen"){
-    color = "white"
-  }else{
-    color = "black"
-  }
+  if(type.includes('white')) color = 'white'
+  else color = 'black'
 
   /* **************** LEFT TO RIGHT ******************** */
 
@@ -644,11 +630,8 @@ function bishopMovement(event){
 
 function queenMovement(event){
   let type = event.target.className
-  if(type === "piece white queen"){
-    color = "white"
-  }else{
-    color = "black"
-  }
+  if(type.includes('white')) color = 'white'
+  else color = 'black'
   towerHorizontalMove(event)
   towerVerticalMove(event)
   bishopMovement(event)
