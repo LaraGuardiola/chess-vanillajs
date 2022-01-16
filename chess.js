@@ -111,22 +111,12 @@ function removeTileBackgrounds(){
 
 //* GAMEPLAY FUNCTIONS */
 
-function checkPiece(event){ //can be refactored with a switch statement
-  if(isPawn(event)){
-    pawnMovement(event)
-  }
-  if(isTower(event)){
-    towerMovement(event)
-  }
-  if(isKnight(event)){
-    knightMovement(event)
-  }
-  if(isBishop(event)){
-    bishopMovement(event)
-  }
-  if(isQueen(event)){
-    queenMovement(event)
-  }
+function checkPiece(event){ 
+  if(isPawn(event)) pawnMovement(event)
+  if(isTower(event)) towerMovement(event)
+  if(isKnight(event)) knightMovement(event)
+  if(isBishop(event)) bishopMovement(event)
+  if(isQueen(event)) queenMovement(event)
 }
 
 function isPawn(event){

@@ -44,6 +44,7 @@ body {
     grid-template-columns: repeat(8, 70px);
     grid-template-rows: 40px repeat(8, 70px) 40px;
     grid-auto-flow: row;
+    box-shadow: 0 0 40px grey;
   }
   .wrapper-inner{
     display: grid;
@@ -59,7 +60,7 @@ body {
     justify-content: center;
     align-items: center;
     padding: 20px;
-    background-color: #F0CDA3;
+    background-color: #fff;
     text-align: center;   
     cursor: pointer;
     border: "";
@@ -73,7 +74,7 @@ body {
   .bottom{
     display: grid;
     align-items: stretch;
-    background-color: #7d694c;
+    background-color: #a1a6a2;
   }
   .top {
     grid-column-start: 1;
@@ -95,19 +96,14 @@ body {
   .box:nth-child(41) ~ div:nth-child(-2n+48), 
   .box:nth-child(49) ~ div:nth-child(-2n+57), 
   .box:nth-child(57) ~ div:nth-child(-2n+64){
-    background-color: #C36C37;
+    background-color: #e0e0e0;
   }
 
 /* PIECES */
 
   .piece{
     font-size: 52px;
-    font-weight: bold;
     transform: translate(0, 0);
-  }
-
-  .white{
-      color: #fffbfb;
   }
   
   /*DRAG AND DROP*/
