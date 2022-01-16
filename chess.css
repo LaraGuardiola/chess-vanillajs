@@ -63,6 +63,7 @@ body {
     text-align: center;   
     cursor: pointer;
     border: "";
+    user-select: none;
   }
   .box-inner{
     text-align: center;
