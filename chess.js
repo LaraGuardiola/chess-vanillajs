@@ -458,7 +458,9 @@ function bishopMovement(event){
     color = "black"
   }
 
-  //calculates starting row for topLeft
+  /* **************** LEFT TO RIGHT ******************** */
+
+  //calculates starting row and index row for topLeft
   let indexRowStartPointLeftRight = 0
   let startingPointTopLeft = rowPos - indexRow
   if(startingPointTopLeft < 0){
@@ -466,15 +468,15 @@ function bishopMovement(event){
     indexRowStartPointLeftRight = indexRow - rowPos
   }
 
-  //calculates starting tilesArray  index for topLeft
-  let ogIndexRowLR = indexRow
+  //calculates starting tilesArray index for topLeft
+  let ogIndexRow = indexRow
   if(indexRow > rowPos){
     indexRow = rowPos
   }
-  let startTopLeft = ((rowPos * 8) + ogIndexRowLR) - (9 * indexRow)
+  let startTopLeft = ((rowPos * 8) + ogIndexRow) - (9 * indexRow)
   
   //calculates ending tilesArray index for topLeft
-  let distanceToEndRow =  7 - ogIndexRowLR
+  let distanceToEndRow =  7 - ogIndexRow
   let endTopLeft = indexPiece + (9 * distanceToEndRow)
   if(endTopLeft > 63){
     distanceToEndRow = 7 - rowPos
@@ -491,11 +493,10 @@ function bishopMovement(event){
       indexRowStartPointLeftRight++
     }
   }
-
   topLeftBottomRight() 
  
   //within the diagonal array finds the nearest encounters
-  function findFirstEncounters(){
+  function findFirstEncountersLeftRight(){
     let aheadArray = []
     let behindArray = []
     let finalArray = []
@@ -545,5 +546,94 @@ function bishopMovement(event){
       }
     }) 
   }
-  findFirstEncounters()
+  findFirstEncountersLeftRight()
+
+  /* **************** RIGHT TO LEFT ******************** */
+
+  //calculates starting tilesArray index for topRight
+  let startTopRight = indexPiece - ((7 - ogIndexRow) * 7)
+  if(startTopRight < 0){
+    startTopRight = indexPiece - (rowPos * 7)
+  }
+
+  //calculates ending tilesArray index for topRight
+  let distanceToEndRowRight = ogIndexRow
+  let endTopRight = indexPiece + (7 * distanceToEndRowRight)
+  if(endTopRight > 63){
+    distanceToEndRowRight = 7 - rowPos
+    endTopRight = indexPiece + (distanceToEndRowRight * 7)
+  }
+
+  //calculates starting row and index row for topRight
+  let startingRowRight = Math.floor(startTopRight / 8)
+  let indexRowRight = (startTopRight % 8)
+
+  //creates the diagonal array for topLeft
+  function topRightBottomLeft(){
+    for(let i = startingRowRight; i < 8; i++){
+      piecesRightLeft.push(rows[i][indexRowRight])
+      if(indexRowRight === 0){
+        return
+      }
+      indexRowRight--
+    }
+  }
+  topRightBottomLeft()
+
+  //within the diagonal array finds the nearest encounters
+  function findFirstEncountersRightLeft(){
+    let aheadArray = []
+    let behindArray = []
+    let finalArray = []
+    let firstAhead, firstBehind
+
+    for(let piece of piecesRightLeft){
+      if(tilesArray.indexOf(piece) === indexPiece){
+        continue
+      }
+      if(piece.hasChildNodes() && indexPiece > tilesArray.indexOf(piece)){
+        aheadArray.push(tilesArray.indexOf(piece))
+        firstAhead = Math.max(...aheadArray)
+      }
+      if(piece.hasChildNodes() && indexPiece < tilesArray.indexOf(piece)){
+        behindArray.push(tilesArray.indexOf(piece))
+        firstBehind = Math.min(...behindArray)
+      }
+    }
+
+    //treating different cases
+    if(!isNaN(firstAhead) && !isNaN(firstBehind)){   //Has pieces in front and behind OK
+      console.log('Has pieces in front and behind')
+      for(let i = firstAhead; i < firstBehind + 1; i+=7){
+        finalArray.push(tilesArray[i])
+      }
+    }
+    if(isNaN(firstAhead) && !isNaN(firstBehind)){   //Only has pieces behind OK
+      console.log('Only has pieces behind')
+      for(let x = startTopRight; x < firstBehind + 1; x+=7){
+        finalArray.push(tilesArray[x])
+      }
+    }
+    if(!isNaN(firstAhead) && isNaN(firstBehind)){   //Only has pieces in front
+      console.log('Only has pieces in front')
+      for(let y = firstAhead; y < endTopRight + 1; y+=7){
+        finalArray.push(tilesArray[y])
+      }
+    }
+    if(isNaN(firstAhead) && isNaN(firstBehind)){    //Pieces neither behind or in OK?
+      console.log('Pieces neither behind or in')
+      for(let z = startTopRight; z < endTopRight + 1; z+=7){
+        finalArray.push(tilesArray[z])
+      }
+    }
+
+    //paiting and removing unnecessary tiles
+    finalArray.forEach(tile =>{
+      tile.classList.add('ondragstart')
+      if(tile.hasChildNodes() && tile.firstChild.classList.contains(color)){
+        tile.classList.remove('ondragstart')
+      }
+    }) 
+  }
+  findFirstEncountersRightLeft()
 }
