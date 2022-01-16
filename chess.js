@@ -465,12 +465,20 @@ function bishopMovement(event){
     indexRowStartPoint = indexRow - rowPos
   }
 
-  //calculates starting tilesArray index
+  //calculates starting tilesArray index for topLeft
   let ogIndexRow = indexRow
   if(indexRow > rowPos){
     indexRow = rowPos
   }
-  let startTopLeft = ((rowPos * 8) + ogIndexRow) - (9 * indexRow) 
+  let startTopLeft = ((rowPos * 8) + ogIndexRow) - (9 * indexRow)
+  
+  //calculates starting tilesArray index for topRight
+
+  let startTopRight = indexPiece - ((7 - ogIndexRow) * 7)
+  if(startTopRight < 0){
+    startTopRight = indexPiece - (rowPos * 7)
+  }
+  console.log(startTopRight)
 
   //calculates ending tilesArray index
   let distanceToEndRow =  7 - ogIndexRow
@@ -490,7 +498,19 @@ function bishopMovement(event){
       indexRowStartPoint++
     }
   }
-  topLeftBottomRight() 
+
+  function topRightBottomLeft(){
+    for(let i = startingPoint; i < 8; i+= 7){
+      rows[i][indexRowStartPoint].classList.add('ondragstart')
+      piecesLeftRight.push(rows[i][indexRowStartPoint])
+      if(indexRowStartPoint === 7){
+        return
+      }
+      indexRowStartPoint++
+    }
+  }
+  topRightBottomLeft()
+  //topLeftBottomRight() 
 
   //within the diagonal array finds the nearest encounters
   function findFirstEncounters(){
@@ -543,5 +563,5 @@ function bishopMovement(event){
       }
     }) 
   }
-  findFirstEncounters()
+  //findFirstEncounters()
 }
