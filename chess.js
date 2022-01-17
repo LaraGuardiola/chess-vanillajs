@@ -1,6 +1,7 @@
 let dragged
 let lastMovedStartPos
 let lastMovedEndPos
+let flag = []
 let color
 let firstMove, normalMove //pawn
 let tiles = document.querySelectorAll('.box')
@@ -33,8 +34,12 @@ function ondragstart(event){
   checkPiece(event)
   dragged = event.target
   lastMovedStartPos = dragged.parentNode
-  lastMovedStartPos.style.border = "3px solid black"
-
+  lastMovedStartPos.style.border = '3px solid black'
+  flag.push(lastMovedStartPos)
+  if(flag.length > 1){
+    flag[0].style.removeProperty('border')
+    flag.shift()
+  }
   //first time playing lastMovedEndPos is not initialized so this if is necessary to catch the undefined it was going to give otherwise
   if(lastMovedEndPos != null){
     lastMovedEndPos.style.removeProperty("border")
@@ -106,6 +111,9 @@ function removeTileBackgrounds(){
     if(tile.classList.contains("ondragstart")){
       tile.classList.remove("ondragstart")
     }
+    if(tile.style.border === "3px solid black"){
+      tile.style.removeProperty('border')
+    }
   })
 }
 
@@ -113,7 +121,7 @@ function removeTileBackgrounds(){
 
 function checkPiece(event){ 
   if(isPawn(event)) pawnMovement(event)
-  if(isTower(event)) towerMovement(event)
+  if(isTower(event)) rookMovement(event)
   if(isKnight(event)) knightMovement(event)
   if(isBishop(event)) bishopMovement(event)
   if(isQueen(event)) queenMovement(event)
@@ -257,12 +265,12 @@ function getColumn(event){
 }
 
   //* ROOK */
-function towerMovement(event){
+function rookMovement(event){
   let type = event.target.className
   if(type.includes('white')) color = 'white'
   else color = 'black'
-  towerHorizontalMove(event)
-  towerVerticalMove(event)
+  rookHorizontalMove(event)
+  rookVerticalMove(event)
 }
 
 function printMovementTiles(movementArray){
@@ -273,7 +281,7 @@ function printMovementTiles(movementArray){
   })
 }
 
-function towerHorizontalMove(event){
+function rookHorizontalMove(event){
   let indexPiece = tilesArray.indexOf(event.target.parentNode)
   let rowPos = Math.floor(indexPiece / 8)
   let row = rows[rowPos]
@@ -312,7 +320,7 @@ function towerHorizontalMove(event){
   printMovementTiles(movementArray)
 }
 
-function towerVerticalMove(event){
+function rookVerticalMove(event){
   let column = getColumn(event)
   let nonEmptySpaces = []
   let indexColumn = column.indexOf(event.target.parentNode)
@@ -629,11 +637,11 @@ function queenMovement(event){
   let type = event.target.className
   if(type.includes('white')) color = 'white'
   else color = 'black'
-  towerHorizontalMove(event)
-  towerVerticalMove(event)
+  rookHorizontalMove(event)
+  rookVerticalMove(event)
   bishopMovement(event)
 }
 
 function kingMovement(event){
-  
+
 }
