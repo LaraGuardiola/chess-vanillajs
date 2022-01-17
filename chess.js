@@ -37,8 +37,13 @@ function ondragstart(event){
   lastMovedStartPos.style.border = '3px solid black'
   flag.push(lastMovedStartPos)
   if(flag.length > 1){
+    if(flag[0] === flag[1]){
+      flag.shift()
+      return
+    }
     flag[0].style.removeProperty('border')
     flag.shift()
+    console.log(flag)
   }
   //first time playing lastMovedEndPos is not initialized so this if is necessary to catch the undefined it was going to give otherwise
   if(lastMovedEndPos != null){
