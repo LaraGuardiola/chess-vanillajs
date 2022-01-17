@@ -1,7 +1,7 @@
 let dragged
 let lastMovedStartPos
 let lastMovedEndPos
-let flag = []
+let borderFlag = []
 let color
 let firstMove, normalMove //pawn
 let tiles = document.querySelectorAll('.box')
@@ -35,15 +35,14 @@ function ondragstart(event){
   dragged = event.target
   lastMovedStartPos = dragged.parentNode
   lastMovedStartPos.style.border = '3px solid black'
-  flag.push(lastMovedStartPos)
-  if(flag.length > 1){
-    if(flag[0] === flag[1]){
-      flag.shift()
+  borderFlag.push(lastMovedStartPos)
+  if(borderFlag.length > 1){
+    if(borderFlag[0] === borderFlag[1]){
+      borderFlag.shift()
       return
     }
-    flag[0].style.removeProperty('border')
-    flag.shift()
-    console.log(flag)
+    borderFlag[0].style.removeProperty('border')
+    borderFlag.shift()
   }
   //first time playing lastMovedEndPos is not initialized so this if is necessary to catch the undefined it was going to give otherwise
   if(lastMovedEndPos != null){
@@ -130,7 +129,7 @@ function checkPiece(event){
   if(isKnight(event)) knightMovement(event)
   if(isBishop(event)) bishopMovement(event)
   if(isQueen(event)) queenMovement(event)
-  if(isKing(event)) knightMovement(event)
+  if(isKing(event)) kingMovement(event)
 }
 
 function isPawn(event){
@@ -372,10 +371,10 @@ function knightMovement(event){
   else color = 'black'
 
   //Necessary in order to avoid unwanted movements to the other extreme of the board
-  if(isKnightInFirstColumn(indexPiece)) knightMovements = [-17,-10,6,15]
-  if(isKnightInSecondColumn(indexPiece)) knightMovements = [-17,-15,-10,6,15,17]
-  if(isKnightInSeventhColumn(indexPiece)) knightMovements = [-17,-15,-6,10,15,17]
-  if(isKnightInEighthColumn(indexPiece)) knightMovements = [-15,-6,10,17]
+  if(isInFirstColumn(indexPiece)) knightMovements = [-17,-10,6,15]
+  if(isInSecondColumn(indexPiece)) knightMovements = [-17,-15,-10,6,15,17]
+  if(isInSeventhColumn(indexPiece)) knightMovements = [-17,-15,-6,10,15,17]
+  if(isInEighthColumn(indexPiece)) knightMovements = [-15,-6,10,17]
   
   knightMovements.forEach(move => {
     if(!isOutOfBounds(indexPiece - move)){
@@ -390,7 +389,7 @@ function knightMovement(event){
 }
 
 //switch statements are slightly more efficient than ifs statements (0,008 ms vs 0,005)
-function isKnightInSecondColumn(position){
+function isInSecondColumn(position){
   switch(position){
     case 1:
     case 9:
@@ -404,7 +403,7 @@ function isKnightInSecondColumn(position){
   }
 }
 
-function isKnightInFirstColumn(position){
+function isInFirstColumn(position){
   switch(position){
     case 0:
     case 8:
@@ -418,7 +417,7 @@ function isKnightInFirstColumn(position){
   }
 }
 
-function isKnightInSeventhColumn(position){
+function isInSeventhColumn(position){
   switch(position){
     case 6:
     case 14:
@@ -432,7 +431,7 @@ function isKnightInSeventhColumn(position){
   }
 }
 
-function isKnightInEighthColumn(position){
+function isInEighthColumn(position){
   switch(position){
     case 7:
     case 15:
@@ -648,5 +647,24 @@ function queenMovement(event){
 }
 
 function kingMovement(event){
+  let kingMovements = [-9,-8,-7,1,9,8,7,-1]
+  let indexPiece = tilesArray.indexOf(event.target.parentNode)
+  let type = event.target.className
 
+  if(type.includes('white')) color = 'white'
+  else color = 'black'
+
+  if(isInFirstColumn(indexPiece)) kingMovements = [-1,-8,-9,8,7]
+  if(isInEighthColumn(indexPiece)) kingMovements = [1,8,9,-8,-7]
+
+  kingMovements.forEach(move => {
+    if(!isOutOfBounds(indexPiece - move)){
+      tilesArray[indexPiece - move].classList.add('ondragstart')
+    }
+    tilesArray.forEach(tile => {
+      if(tile.hasChildNodes() && tile.firstChild.classList.contains(color)){
+        tile.classList.remove('ondragstart')
+      }
+    })  
+  })
 }
