@@ -117,6 +117,7 @@ function checkPiece(event){
   if(isKnight(event)) knightMovement(event)
   if(isBishop(event)) bishopMovement(event)
   if(isQueen(event)) queenMovement(event)
+  if(isKing(event)) knightMovement(event)
 }
 
 function isPawn(event){
@@ -137,6 +138,10 @@ function isBishop(event){
 
 function isQueen(event){
   return event.target.classList.contains('queen') ? true : false
+}
+
+function isKing(event){
+  return event.target.classList.contains('king') ? true : false
 }
 
 //* MOVEMENTS */
@@ -354,18 +359,10 @@ function knightMovement(event){
   else color = 'black'
 
   //Necessary in order to avoid unwanted movements to the other extreme of the board
-  if(isKnightInFirstColumn(indexPiece)){
-    knightMovements = [-17,-10,6,15]
-  }
-  if(isKnightInSecondColumn(indexPiece)){
-    knightMovements = [-17,-15,-10,6,15,17]
-  }
-  if(isKnightInSeventhColumn(indexPiece)){
-    knightMovements = [-17,-15,-6,10,15,17]
-  }
-  if(isKnightInEighthColumn(indexPiece)){
-    knightMovements = [-15,-6,10,17]
-  }
+  if(isKnightInFirstColumn(indexPiece)) knightMovements = [-17,-10,6,15]
+  if(isKnightInSecondColumn(indexPiece)) knightMovements = [-17,-15,-10,6,15,17]
+  if(isKnightInSeventhColumn(indexPiece)) knightMovements = [-17,-15,-6,10,15,17]
+  if(isKnightInEighthColumn(indexPiece)) knightMovements = [-15,-6,10,17]
   
   knightMovements.forEach(move => {
     if(!isOutOfBounds(indexPiece - move)){
@@ -635,4 +632,8 @@ function queenMovement(event){
   towerHorizontalMove(event)
   towerVerticalMove(event)
   bishopMovement(event)
+}
+
+function kingMovement(event){
+  
 }
