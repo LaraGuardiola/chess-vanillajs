@@ -16,12 +16,16 @@ let piecesCounter = { //useful to check if pawns have moved or not
     piecesCounter.tiles[index]++
   }
 }
+const obj = {
+  counter: [],
+  lengths: []
+}
 let setEvent = (...args) => tiles.forEach(tile => tile.addEventListener(...args));
 
 //*EVENTS
 
 tiles.forEach(() =>{
-  setEvent('click', removeTileBackgrounds,false) //workaround to fix multiple backgrounds if dragged piece is returned to its original place 
+  setEvent('click', cleanBoard,false) //workaround to fix multiple backgrounds if dragged piece is returned to its original place 
   setEvent('dragstart', ondragstart, false)
   setEvent('dragover', ondragover, false)
   setEvent('dragleave', ondragleave, false)
@@ -31,6 +35,7 @@ tiles.forEach(() =>{
 //* DRAG AND DROP FUNCTIONS
 
 function ondragstart(event){
+  cleanTiles()
   checkPiece(event)
   dragged = event.target
   lastMovedStartPos = dragged.parentNode
@@ -66,7 +71,7 @@ function ondragleave(event){
 }
 
 function ondrop(event){
-  removeTileBackgrounds()
+  cleanBoard()
   changeTurn(event) 
   dragged.parentNode.removeChild(dragged)
 
@@ -110,7 +115,7 @@ function updateTurnSections(){
   }
 }
 
-function removeTileBackgrounds(){
+function cleanBoard(){
   tilesArray.forEach(tile =>{
     if(tile.classList.contains("ondragstart")){
       tile.classList.remove("ondragstart")
@@ -121,11 +126,31 @@ function removeTileBackgrounds(){
   })
 }
 
+function cleanTiles(){
+  tilesArray.forEach(tile =>{
+    if(tile.classList.contains('ondragstart')){
+      if(obj.counter.indexOf(tile) !== -1){
+        return
+      }
+      obj.counter.push(tile)
+    }
+  })
+  obj.lengths.push(obj.counter.length)
+  if(obj.lengths.length > 1 ) {
+    obj.lengths.shift()
+    for(let i = 0; i < obj.lengths[0]; i++){
+      obj.counter[i].classList.remove('ondragstart')
+    }
+    obj.counter.splice(0,obj.lengths[0])
+  }
+  console.log(obj)
+}
+
 //* GAMEPLAY FUNCTIONS */
 
 function checkPiece(event){ 
   if(isPawn(event)) pawnMovement(event)
-  if(isTower(event)) rookMovement(event)
+  if(isRook(event)) rookMovement(event)
   if(isKnight(event)) knightMovement(event)
   if(isBishop(event)) bishopMovement(event)
   if(isQueen(event)) queenMovement(event)
@@ -136,7 +161,7 @@ function isPawn(event){
   return event.target.classList.contains('pawn') ? true : false
 }
 
-function isTower(event){
+function isRook(event){
   return event.target.classList.contains('tower') ? true : false
 }
 
@@ -201,6 +226,7 @@ function pawnFirstTurn(indexPiece){ //FIRST TURN
       tilesArray[firstMove].classList.add('ondragstart')  
     }
   }
+  
 }
 
 function pawnNormalTurn(indexPiece){ //NORMAL TURN
@@ -636,7 +662,7 @@ function bishopMovement(event){
   }
   findFirstEncountersRightLeft()
 }
-
+  //* QUEEN */
 function queenMovement(event){
   let type = event.target.className
   if(type.includes('white')) color = 'white'
@@ -646,6 +672,7 @@ function queenMovement(event){
   bishopMovement(event)
 }
 
+  //* KING */
 function kingMovement(event){
   let kingMovements = [-9,-8,-7,1,9,8,7,-1]
   let indexPiece = tilesArray.indexOf(event.target.parentNode)
