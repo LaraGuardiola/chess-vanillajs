@@ -16,7 +16,7 @@ let piecesCounter = { //useful to check if pawns have moved or not
     piecesCounter.tiles[index]++
   }
 }
-const obj = {
+const ondragstartTiles = {
   counter: [],
   lengths: []
 }
@@ -27,6 +27,7 @@ let setEvent = (...args) => tiles.forEach(tile => tile.addEventListener(...args)
 tiles.forEach(() =>{
   setEvent('click', cleanBoard,false) //workaround to fix multiple backgrounds if dragged piece is returned to its original place 
   setEvent('dragstart', ondragstart, false)
+  setEvent('touchstart',ondragstart, false)
   setEvent('dragover', ondragover, false)
   setEvent('dragleave', ondragleave, false)
   setEvent('drop', ondrop, false)
@@ -129,21 +130,20 @@ function cleanBoard(){
 function cleanTiles(){
   tilesArray.forEach(tile =>{
     if(tile.classList.contains('ondragstart')){
-      if(obj.counter.indexOf(tile) !== -1){
+      if(ondragstartTiles.counter.indexOf(tile) !== -1){
         return
       }
-      obj.counter.push(tile)
+      ondragstartTiles.counter.push(tile)
     }
   })
-  obj.lengths.push(obj.counter.length)
-  if(obj.lengths.length > 1 ) {
-    obj.lengths.shift()
-    for(let i = 0; i < obj.lengths[0]; i++){
-      obj.counter[i].classList.remove('ondragstart')
+  ondragstartTiles.lengths.push(ondragstartTiles.counter.length)
+  if(ondragstartTiles.lengths.length > 1 ) {
+    ondragstartTiles.lengths.shift()
+    for(let i = 0; i < ondragstartTiles.lengths[0]; i++){
+      ondragstartTiles.counter[i].classList.remove('ondragstart')
     }
-    obj.counter.splice(0,obj.lengths[0])
+    ondragstartTiles.counter.splice(0,ondragstartTiles.lengths[0])
   }
-  console.log(obj)
 }
 
 //* GAMEPLAY FUNCTIONS */
