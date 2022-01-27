@@ -1,39 +1,21 @@
-let dragged
-let lastMovedStartPos
-let lastMovedEndPos
-let borderFlag = []
-let color
-let firstMove, normalMove //pawn
-let tiles = document.querySelectorAll('.box')
-let tilesArray = [].slice.call(tiles) //as an array you can get access to indexOf method
-let rows = createRows(tilesArray,8)
-let pieces = document.querySelectorAll('.piece')
-let blackSection = document.querySelector('#blackSection')
-let whiteSection = document.querySelector('#whiteSection')
-let piecesCounter = { //useful to check if pawns have moved or not
-  tiles : tilesArray.map(() => 0),
-  addPieceTurn : index => {
-    piecesCounter.tiles[index]++
-  }
-}
-const ondragstartTiles = {
-  counter: [],
-  lengths: []
-}
-let setEvent = (...args) => tiles.forEach(tile => tile.addEventListener(...args));
+import * as util from './modules/util.js'
 
 //*EVENTS
 
-tiles.forEach(() =>{
-  setEvent('click', cleanBoard,false) //workaround to fix multiple backgrounds if dragged piece is returned to its original place 
-  setEvent('dragstart', ondragstart, false)
-  setEvent('touchstart',ondragstart, false)
-  setEvent('dragover', ondragover, false)
-  setEvent('dragleave', ondragleave, false)
-  setEvent('drop', ondrop, false)
+util.tiles.forEach(() =>{
+  util.setEvent('click', cleanBoard,false) //workaround to fix multiple backgrounds if dragged piece is returned to its original place 
+  util.setEvent('dragstart', ondragstart, false)
+  util.setEvent('touchstart',ondragstart, false)
+  util.setEvent('dragover', ondragover, false)
+  util.setEvent('dragleave', ondragleave, false)
+  util.setEvent('drop', ondrop, false)
 })
 
 //* DRAG AND DROP FUNCTIONS
+
+let dragged
+let lastMovedStartPos
+let lastMovedEndPos
 
 function ondragstart(event){
   cleanTiles()
@@ -41,14 +23,14 @@ function ondragstart(event){
   dragged = event.target
   lastMovedStartPos = dragged.parentNode
   lastMovedStartPos.style.border = '3px solid black'
-  borderFlag.push(lastMovedStartPos)
-  if(borderFlag.length > 1){
-    if(borderFlag[0] === borderFlag[1]){
-      borderFlag.shift()
+  util.borderFlag.push(lastMovedStartPos)
+  if(util.borderFlag.length > 1){
+    if(util.borderFlag[0] === util.borderFlag[1]){
+      util.borderFlag.shift()
       return
     }
-    borderFlag[0].style.removeProperty('border')
-    borderFlag.shift()
+    util.borderFlag[0].style.removeProperty('border')
+    util.borderFlag.shift()
   }
   //first time playing lastMovedEndPos is not initialized so this if is necessary to catch the undefined it was going to give otherwise
   if(lastMovedEndPos != null){
@@ -90,11 +72,11 @@ function ondrop(event){
 //* UI FUNCTIONS */
 
 function changeTurn(event){
-  pieces.forEach(piece => {
+  util.pieces.forEach(piece => {
     let draggableToggle = piece.getAttribute("draggable") === 'true' ? 'false' : 'true'
     piece.setAttribute('draggable',draggableToggle)
   })
-  piecesCounter.addPieceTurn(tilesArray.indexOf(event.target)) //add 1 to the counter meaning pawn has already moved at least once
+  util.piecesCounter.addPieceTurn(util.tilesArray.indexOf(event.target)) //add 1 to the counter meaning pawn has already moved at least once
   setStylesForNextTurn(event)
   updateTurnSections()
 }
@@ -117,7 +99,7 @@ function updateTurnSections(){
 }
 
 function cleanBoard(){
-  tilesArray.forEach(tile =>{
+  util.tilesArray.forEach(tile =>{
     if(tile.classList.contains("ondragstart")){
       tile.classList.remove("ondragstart")
     }
@@ -128,21 +110,21 @@ function cleanBoard(){
 }
 
 function cleanTiles(){
-  tilesArray.forEach(tile =>{
+  util.tilesArray.forEach(tile =>{
     if(tile.classList.contains('ondragstart')){
-      if(ondragstartTiles.counter.indexOf(tile) !== -1){
+      if(util.ondragstartTiles.counter.indexOf(tile) !== -1){
         return
       }
-      ondragstartTiles.counter.push(tile)
+      util.ondragstartTiles.counter.push(tile)
     }
   })
-  ondragstartTiles.lengths.push(ondragstartTiles.counter.length)
-  if(ondragstartTiles.lengths.length > 1 ) {
-    ondragstartTiles.lengths.shift()
-    for(let i = 0; i < ondragstartTiles.lengths[0]; i++){
-      ondragstartTiles.counter[i].classList.remove('ondragstart')
+  util.ondragstartTiles.lengths.push(util.ondragstartTiles.counter.length)
+  if(util.ondragstartTiles.lengths.length > 1 ) {
+    util.ondragstartTiles.lengths.shift()
+    for(let i = 0; i < util.ondragstartTiles.lengths[0]; i++){
+      util.ondragstartTiles.counter[i].classList.remove('ondragstart')
     }
-    ondragstartTiles.counter.splice(0,ondragstartTiles.lengths[0])
+    util.ondragstartTiles.counter.splice(0,util.ondragstartTiles.lengths[0])
   }
 }
 
@@ -183,10 +165,15 @@ function isKing(event){
 
 //* MOVEMENTS */
 
-  //*PAWN
+
+let firstMove
+let normalMove
+let color
+//*PAWN
 function pawnMovement(event){
-  let indexPiece = tilesArray.indexOf(event.target.parentNode)
+  let indexPiece = util.tilesArray.indexOf(event.target.parentNode)
   let type = event.target.className
+  
 
   if(type === 'piece white pawn'){ //WHITE PAWN
     firstMove = indexPiece - 16
@@ -202,63 +189,63 @@ function pawnMovement(event){
 }
 
 function pawnFirstTurn(indexPiece){ //FIRST TURN
-  if(checkCollision(normalMove - 1) && !tilesArray[normalMove - 1].firstChild.classList.contains(color)){   //if theres a piece within attack reach and has different color
+  if(checkCollision(normalMove - 1) && !util.tilesArray[normalMove - 1].firstChild.classList.contains(color)){   //if theres a piece within attack reach and has different color
     if(indexPiece % 8 === 0){ //multiples by 8
-      tilesArray[normalMove - 1].classList.remove('ondragstart')
+      util.tilesArray[normalMove - 1].classList.remove('ondragstart')
     }else{
-      tilesArray[normalMove - 1].classList.add('ondragstart')
+      util.tilesArray[normalMove - 1].classList.add('ondragstart')
     }
   }
-  if(checkCollision(normalMove + 1) && !tilesArray[normalMove + 1].firstChild.classList.contains(color)){
+  if(checkCollision(normalMove + 1) && !util.tilesArray[normalMove + 1].firstChild.classList.contains(color)){
     if((indexPiece +1) % 8 === 0){  //non multiples by 8
-      tilesArray[normalMove + 1].classList.remove('ondragstart')
+      util.tilesArray[normalMove + 1].classList.remove('ondragstart')
     }else{
-      tilesArray[normalMove + 1].classList.add('ondragstart')
+      util.tilesArray[normalMove + 1].classList.add('ondragstart')
     }
   }
   if(checkCollision(normalMove)){
     return
   }else{
     if(checkCollision(firstMove)){
-      tilesArray[normalMove].classList.add('ondragstart')
+      util.tilesArray[normalMove].classList.add('ondragstart')
     }else{
-      tilesArray[normalMove].classList.add('ondragstart')
-      tilesArray[firstMove].classList.add('ondragstart')  
+      util.tilesArray[normalMove].classList.add('ondragstart')
+      util.tilesArray[firstMove].classList.add('ondragstart')  
     }
   }
   
 }
 
 function pawnNormalTurn(indexPiece){ //NORMAL TURN
-  if(checkCollision(normalMove - 1) && !tilesArray[normalMove - 1].firstChild.classList.contains(color)){
+  if(checkCollision(normalMove - 1) && !util.tilesArray[normalMove - 1].firstChild.classList.contains(color)){
     if(indexPiece % 8 === 0){ 
-      tilesArray[normalMove - 1].classList.remove('ondragstart')
+      util.tilesArray[normalMove - 1].classList.remove('ondragstart')
     }else{
-      tilesArray[normalMove - 1].classList.add('ondragstart')
+      util.tilesArray[normalMove - 1].classList.add('ondragstart')
     }
   }
-  if(checkCollision(normalMove + 1) && !tilesArray[normalMove + 1].firstChild.classList.contains(color)){
+  if(checkCollision(normalMove + 1) && !util.tilesArray[normalMove + 1].firstChild.classList.contains(color)){
     if((indexPiece +1) % 8 === 0){
-      tilesArray[normalMove + 1].classList.remove('ondragstart')
+      util.tilesArray[normalMove + 1].classList.remove('ondragstart')
     }else{
-      tilesArray[normalMove + 1].classList.add('ondragstart')
+      util.tilesArray[normalMove + 1].classList.add('ondragstart')
     }
   }
   if(checkCollision(normalMove)){ //checks if in front there's a piece 
     return
   }else{
-    tilesArray[normalMove].classList.add('ondragstart')
+    util.tilesArray[normalMove].classList.add('ondragstart')
   }
 }
 
 //checks if pawn has already moved
 function isPawnFirstTurn(index){
-  return piecesCounter.tiles[index] === 0 ? true : false
+  return util.piecesCounter.tiles[index] === 0 ? true : false
 }
 
 //checks if tile has a piece inside
 function checkCollision(index){
-  return tilesArray[index].hasChildNodes() ? true : false
+  return util.tilesArray[index].hasChildNodes() ? true : false
 }
 
 //checks if inside the tiles of a row there's a piece
