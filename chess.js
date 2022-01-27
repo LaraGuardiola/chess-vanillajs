@@ -3,6 +3,8 @@ import * as pawn from './modules/pawn.js'
 import * as rook from './modules/rook.js'
 import * as knight from './modules/knight.js'
 import * as bishop from './modules/bishop.js'
+import * as queen from './modules/queen.js'
+import * as king from './modules/king.js'
 
 //*EVENTS
 
@@ -140,7 +142,7 @@ function checkPiece(event){
   if(isKnight(event)) knight.knightMovement(event)
   if(isBishop(event)) bishop.bishopMovement(event)
   if(isQueen(event)) queenMovement(event)
-  if(isKing(event)) kingMovement(event)
+  if(isKing(event)) king.kingMovement(event)
 }
 
 function isPawn(event){
@@ -167,17 +169,19 @@ function isKing(event){
   return event.target.classList.contains('king') ? true : false
 }
 
-  //* QUEEN */
+  //* QUEEN 
+  let color
 function queenMovement(event){
+  
   let type = event.target.className
   if(type.includes('white')) color = 'white'
   else color = 'black'
-  rookHorizontalMove(event)
-  rookVerticalMove(event)
-  bishopMovement(event)
+  rook.rookHorizontalMove(event,color)
+  rook.rookVerticalMove(event,color)
+  bishop.bishopMovement(event,color)
 }
-
-  //* KING */
+/*
+  /KING 
 function kingMovement(event){
   let kingMovements = [-9,-8,-7,1,9,8,7,-1]
   let indexPiece = tilesArray.indexOf(event.target.parentNode)
@@ -200,3 +204,4 @@ function kingMovement(event){
     })  
   })
 }
+*/
