@@ -1,15 +1,14 @@
 import * as util from './util.js'
 
-//*BISHOP
+  //* BISHOP */
 
-export function bishopMovement(event){
+export function bishopMovement(event,color){
   let indexPiece = util.tilesArray.indexOf(event.target.parentNode)
   let rowPos = Math.floor(indexPiece / 8)
   let indexRow = util.rows[rowPos].indexOf(event.target.parentNode)
   let type = event.target.className
   let piecesLeftRight = []
   let piecesRightLeft = []
-  let color
 
   if(type.includes('white')) color = 'white'
   else color = 'black'

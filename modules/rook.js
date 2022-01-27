@@ -2,8 +2,6 @@ import * as util from './util.js'
   
   //* ROOK */
 
-let color
-
 //checks if inside the tiles of a row there's a piece
 export function checkRowCollision(rowIndex,index){
   return util.rows[rowIndex][index].hasChildNodes() ? true : false
@@ -39,10 +37,11 @@ export function getColumn(event){
 
 export function rookMovement(event){
   let type = event.target.className
+  let color
   if(type.includes('white')) color = 'white'
   else color = 'black'
-  rookHorizontalMove(event)
-  rookVerticalMove(event)
+  rookHorizontalMove(event,color)
+  rookVerticalMove(event,color)
 }
 
 export function printMovementTiles(movementArray){
@@ -53,7 +52,7 @@ export function printMovementTiles(movementArray){
   })
 }
 
-export function rookHorizontalMove(event){
+export function rookHorizontalMove(event,color){
   let indexPiece = util.tilesArray.indexOf(event.target.parentNode)
   let rowPos = Math.floor(indexPiece / 8)
   let row = util.rows[rowPos]
@@ -92,7 +91,7 @@ export function rookHorizontalMove(event){
   printMovementTiles(movementArray)
 }
 
-export function rookVerticalMove(event){
+export function rookVerticalMove(event,color){
   let column = getColumn(event)
   let nonEmptySpaces = []
   let indexColumn = column.indexOf(event.target.parentNode)

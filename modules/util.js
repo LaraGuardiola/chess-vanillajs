@@ -1,5 +1,5 @@
 //*UTILS
-
+export let color = undefined
 export let borderFlag = []
 export let firstMove, normalMove //pawn
 export let tiles = document.querySelectorAll('.box')

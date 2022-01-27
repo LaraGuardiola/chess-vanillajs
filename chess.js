@@ -139,9 +139,9 @@ function cleanTiles(){
 function checkPiece(event){ 
   if(isPawn(event)) pawn.pawnMovement(event)
   if(isRook(event)) rook.rookMovement(event)
-  if(isKnight(event)) knight.knightMovement(event)
+  if(isKnight(event)) knight.knightMovement(event,util.color)
   if(isBishop(event)) bishop.bishopMovement(event)
-  if(isQueen(event)) queenMovement(event)
+  if(isQueen(event)) queen.queenMovement(event,util.color)
   if(isKing(event)) king.kingMovement(event)
 }
 
@@ -169,39 +169,3 @@ function isKing(event){
   return event.target.classList.contains('king') ? true : false
 }
 
-  //* QUEEN 
-  let color
-function queenMovement(event){
-  
-  let type = event.target.className
-  if(type.includes('white')) color = 'white'
-  else color = 'black'
-  rook.rookHorizontalMove(event,color)
-  rook.rookVerticalMove(event,color)
-  bishop.bishopMovement(event,color)
-}
-/*
-  /KING 
-function kingMovement(event){
-  let kingMovements = [-9,-8,-7,1,9,8,7,-1]
-  let indexPiece = tilesArray.indexOf(event.target.parentNode)
-  let type = event.target.className
-
-  if(type.includes('white')) color = 'white'
-  else color = 'black'
-
-  if(isInFirstColumn(indexPiece)) kingMovements = [-1,-8,-9,8,7]
-  if(isInEighthColumn(indexPiece)) kingMovements = [1,8,9,-8,-7]
-
-  kingMovements.forEach(move => {
-    if(!isOutOfBounds(indexPiece - move)){
-      tilesArray[indexPiece - move].classList.add('ondragstart')
-    }
-    tilesArray.forEach(tile => {
-      if(tile.hasChildNodes() && tile.firstChild.classList.contains(color)){
-        tile.classList.remove('ondragstart')
-      }
-    })  
-  })
-}
-*/

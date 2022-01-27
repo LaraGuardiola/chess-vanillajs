@@ -9,7 +9,7 @@ export function queenMovement(event){
   
   if(type.includes('white')) color = 'white'
   else color = 'black'
-  rook.rookHorizontalMove(event)
-  rook.rookVerticalMove(event)
-  bishop.bishopMovement(event)
+  rook.rookHorizontalMove(event,color)
+  rook.rookVerticalMove(event,color)
+  bishop.bishopMovement(event,color)
 }

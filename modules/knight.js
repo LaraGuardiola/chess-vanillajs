@@ -1,11 +1,12 @@
 import * as util from './util.js'
 
   //* KNIGHT */
+  
 export function knightMovement(event){
   let knightMovements = [-17,-15,-10,-6,6,10,15,17]
   let indexPiece = util.tilesArray.indexOf(event.target.parentNode)
   let type = event.target.className
-  let color 
+  let color
 
   if(type.includes('white')) color = 'white'
   else color = 'black'
