@@ -38,7 +38,6 @@ export function ondragover(event){
   }else{ 
     event.dataTransfer.dropEffect = "none" // dropping is not allowed
   }
-  //event.target.classList.add("ondragover")   
 }
 
 export function ondragleave(event){
