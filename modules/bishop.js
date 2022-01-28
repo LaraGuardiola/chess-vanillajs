@@ -9,6 +9,7 @@ export function bishopMovement(event,color){
   let type = event.target.className
   let piecesLeftRight = []
   let piecesRightLeft = []
+  let finalArray = []
 
   if(type.includes('white')) color = 'white'
   else color = 'black'
@@ -54,7 +55,6 @@ export function bishopMovement(event,color){
   function findFirstEncountersLeftRight(){
     let aheadArray = []
     let behindArray = []
-    let finalArray = []
     let firstAhead, firstBehind
 
     for(let piece of piecesLeftRight){
@@ -92,8 +92,9 @@ export function bishopMovement(event,color){
         finalArray.push(util.tilesArray[z])
       }
     }
+  }
 
-    //paiting and removing unnecessary tiles
+  function cleanTiles(finalArray){
     finalArray.forEach(tile =>{
       tile.classList.add('ondragstart')
       if(tile.hasChildNodes() && tile.firstChild.classList.contains(color)){
@@ -101,6 +102,7 @@ export function bishopMovement(event,color){
       }
     }) 
   }
+  cleanTiles(finalArray)
   findFirstEncountersLeftRight()
 
   /* **************** RIGHT TO LEFT ******************** */
@@ -139,7 +141,7 @@ export function bishopMovement(event,color){
   function findFirstEncountersRightLeft(){
     let aheadArray = []
     let behindArray = []
-    let finalArray = []
+    
     let firstAhead, firstBehind
 
     for(let piece of piecesRightLeft){
@@ -177,14 +179,7 @@ export function bishopMovement(event,color){
         finalArray.push(util.tilesArray[z])
       }
     }
-
-    //paiting and removing unnecessary tiles
-    finalArray.forEach(tile =>{
-      tile.classList.add('ondragstart')
-      if(tile.hasChildNodes() && tile.firstChild.classList.contains(color)){
-        tile.classList.remove('ondragstart')
-      }
-    }) 
+    cleanTiles(finalArray)
   }
   findFirstEncountersRightLeft()
 }

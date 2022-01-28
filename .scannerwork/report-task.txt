@@ -2,5 +2,5 @@ projectKey=chess-vanillajs
 serverUrl=http://localhost:9000
 serverVersion=9.2.4.50792
 dashboardUrl=http://localhost:9000/dashboard?id=chess-vanillajs
-ceTaskId=AX5JgkQ6I5S5Z0ipUq_s
-ceTaskUrl=http://localhost:9000/api/ce/task?id=AX5JgkQ6I5S5Z0ipUq_s
+ceTaskId=AX6hYO7v-QbIWK5cpwfi
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AX6hYO7v-QbIWK5cpwfi
