@@ -94,7 +94,7 @@ export function bishopMovement(event,color){
     }
   }
 
-  function cleanTiles(finalArray){
+  function cleanTiles(){
     finalArray.forEach(tile =>{
       tile.classList.add('ondragstart')
       if(tile.hasChildNodes() && tile.firstChild.classList.contains(color)){
@@ -102,7 +102,7 @@ export function bishopMovement(event,color){
       }
     }) 
   }
-  cleanTiles(finalArray)
+  cleanTiles()
   findFirstEncountersLeftRight()
 
   /* **************** RIGHT TO LEFT ******************** */
@@ -179,7 +179,7 @@ export function bishopMovement(event,color){
         finalArray.push(util.tilesArray[z])
       }
     }
-    cleanTiles(finalArray)
+    cleanTiles()
   }
   findFirstEncountersRightLeft()
 }
