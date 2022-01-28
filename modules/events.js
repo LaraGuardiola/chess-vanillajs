@@ -1,9 +1,7 @@
 import * as util from './util.js'
 import * as gameplay from './gameplay.js'
-import * as events from './events.js'
 
 //*EVENTS
-
 
 //* DRAG AND DROP FUNCTIONS
 
@@ -12,7 +10,7 @@ let dragged
 let lastMovedEndPos
 
 export function ondragstart(event){
-  events.cleanTiles()
+  cleanTiles()
   gameplay.checkPiece(event)
   dragged = event.target
   lastMovedStartPos = dragged.parentNode
@@ -48,8 +46,8 @@ export function ondragleave(event){
 }
 
 export function ondrop(event){
-  events.cleanBoard()
-  events.changeTurn(event) 
+  cleanBoard()
+  changeTurn(event) 
   dragged.parentNode.removeChild(dragged)
 
   if(event.target.classList.contains('piece')){  //if dropped at span, replace content

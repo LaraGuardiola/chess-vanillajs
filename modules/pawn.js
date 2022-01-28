@@ -1,6 +1,6 @@
 import * as util from './util.js'
 
-//*PAWN
+  // *PAWN */
 
 let firstMove
 let normalMove

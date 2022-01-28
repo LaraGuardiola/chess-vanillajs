@@ -1,4 +1,5 @@
-//*UTILS
+//* UTILS */
+
 export let color = undefined
 export let dragged = undefined
 export let lastMovedStartPos = undefined
@@ -23,7 +24,7 @@ export const ondragstartTiles = {
 }
 export let setEvent = (...args) => tiles.forEach(tile => tile.addEventListener(...args));
 
-export function createRows(arr, numGroups) {
+function createRows(arr, numGroups) {
     const perGroup = Math.ceil(arr.length / numGroups)   //in this case, 8 per group (8x8 = 64 tiles)
     return new Array(numGroups)
       .fill('')

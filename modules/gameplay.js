@@ -6,7 +6,7 @@ import * as bishop from './bishop.js'
 import * as queen from './queen.js'
 import * as king from './king.js'
 
-/* GAMEPLAY FUNCTIONS */
+//* GAMEPLAY FUNCTIONS */
 
 export function checkPiece(event){ 
     if(isPawn(event)) pawn.pawnMovement(event)
