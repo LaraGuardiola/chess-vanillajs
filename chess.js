@@ -7,7 +7,6 @@ util.tiles.forEach(() =>{
   util.setEvent('dragstart', events.ondragstart, false)
   util.setEvent('touchstart',events.ondragstart, false)
   util.setEvent('dragover', events.ondragover, false)
-  util.setEvent('dragleave', events.ondragleave, false)
   util.setEvent('drop', events.ondrop, false)
 })
 

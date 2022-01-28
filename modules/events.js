@@ -40,11 +40,6 @@ export function ondragover(event){
   }
 }
 
-export function ondragleave(event){
-  event.preventDefault()
-  event.target.classList.remove("ondragover")
-}
-
 export function ondrop(event){
   ui.cleanBoard()
   ui.changeTurn(event) 

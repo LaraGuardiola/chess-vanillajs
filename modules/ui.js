@@ -13,14 +13,14 @@ export function changeTurn(event){
   updateTurnSections()
 }
 
-export function setStylesForNextTurn(event){
+function setStylesForNextTurn(event){
   let lastMovedEndPos = event.target
   lastMovedEndPos.classList.remove("ondragover")
   lastMovedEndPos.style.border = "3px solid black"
   events.lastMovedStartPos.style.removeProperty("border")
 }
 
-export function updateTurnSections(){
+function updateTurnSections(){
   if(whiteSection.style.display === "none" && blackSection.style.display === "block"){
     whiteSection.style.display = "block"
     blackSection.style.display = "none"
