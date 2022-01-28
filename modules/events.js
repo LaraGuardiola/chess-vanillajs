@@ -6,15 +6,16 @@ import * as events from './events.js'
 
 
 //* DRAG AND DROP FUNCTIONS
+
 let lastMovedStartPos
 let dragged
+let lastMovedEndPos
 
 export function ondragstart(event){
   events.cleanTiles()
   gameplay.checkPiece(event)
   dragged = event.target
   lastMovedStartPos = dragged.parentNode
-  let lastMovedEndPos
   lastMovedStartPos.style.border = '3px solid black'
   util.borderFlag.push(lastMovedStartPos)
   if(util.borderFlag.length > 1){
