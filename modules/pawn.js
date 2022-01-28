@@ -9,7 +9,6 @@ let color
 export function pawnMovement(event){
   let indexPiece = util.tilesArray.indexOf(event.target.parentNode)
   let type = event.target.className
-  
 
   if(type === 'piece white pawn'){ //WHITE PAWN
     firstMove = indexPiece - 16
