@@ -1,9 +1,5 @@
 //* UTILS */
 
-export let color = undefined
-export let dragged = undefined
-export let lastMovedStartPos = undefined
-export let lastMovedEndPos = undefined
 export let borderFlag = []
 export let firstMove, normalMove //pawn
 export let tiles = document.querySelectorAll('.box')
